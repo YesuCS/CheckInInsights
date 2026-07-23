@@ -48,7 +48,7 @@ Outputs:
 - `com.yesuchum.CheckInInsights\bin\Debug\net472\com.yesuchum.CheckInInsights.dll`
 - `com.yesuchum.CheckInInsights.Obsidian\dist\*.obs.js`
 
-These deploy into a Rock install as described in `docs/TechnicalSpec.md`.
+These deploy into a Rock install as described in `docs/TechnicalSpec.md`. End users should install from the **Rock Shop** instead of building; see the [User Guide](docs/UserGuide.md).
 
 ## Rock version
 

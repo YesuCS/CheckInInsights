@@ -35,11 +35,23 @@ Everything works identically whether an area runs on legacy check-in or Next-Gen
 
 ## Installation
 
+### From the Rock Shop (recommended)
+
+1. In Rock, go to **Admin Tools → Rock Shop**.
+2. Search for `CheckInInsights` and open the package.
+3. Click **Install** and restart the Rock app pool when prompted.
+
+### Manual install (developer / .plugin file)
+
+If you have a `.plugin` file on hand: **Admin Tools → Rock Shop → Installed Packages → Install Package File**, upload it, restart when prompted. Or, from a source build:
+
 1. Copy `com.yesuchum.CheckInInsights.dll` into `RockWeb/Bin/`.
 2. Copy the three `*.obs.js` bundles (plus `.map` files) into `RockWeb/Plugins/com_yesuchum/CheckInInsights/`.
 3. Restart the Rock application (full restart, not just a recycle-on-touch; plugin migrations only run at startup).
 
-The startup migration:
+### What the installer does
+
+Either path, the startup migration:
 
 - Creates **Admin Tools > Installed Plugins > Check-in Insights** (icon `ti ti-calendar-time`) with a landing page listing the three tools as cards, plus one child page per tool with its block already placed.
 - Registers the three block types under the **Yesu Chum > Check-in Insights** category.

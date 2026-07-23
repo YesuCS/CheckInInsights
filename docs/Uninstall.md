@@ -1,6 +1,6 @@
 # CheckInInsights Uninstall Guide
 
-How to cleanly remove CheckInInsights from a Rock install. The good news: this plugin creates **no database tables** and never writes to your check-in data, so uninstalling is simpler than most plugins. It's a matter of removing pages, block instances, one job, one stored setting, and the files.
+How to cleanly remove CheckInInsights from a Rock install. **Rock does not currently expose an uninstall action in the Rock Shop UI for installed plugins**, so the path is the manual one below regardless of how you installed. The good news: this plugin creates **no database tables** and never writes to your check-in data, so uninstalling is simpler than most plugins. It's a matter of removing pages, block instances, one job, one stored setting, and the files.
 
 For day-to-day usage see `UserGuide.md`. For architecture see `TechnicalSpec.md`.
 
