@@ -1,6 +1,6 @@
-System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls/notificationBox.obs', '@Obsidian/Controls/panel.obs', '@Obsidian/Utility/block', '@Obsidian/Controls/dropDownList.obs', '@Obsidian/Controls/modal.obs', '@Obsidian/Controls/Internal/dockedPanel.obs', '@Obsidian/Controls/rockButton.obs', '@Obsidian/Enums/Controls/btnType'], (function (exports) {
+System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls/notificationBox.obs', '@Obsidian/Controls/panel.obs', '@Obsidian/Utility/block', '@Obsidian/Controls/dropDownList.obs', '@Obsidian/Controls/modal.obs', '@Obsidian/Controls/rockButton.obs', '@Obsidian/Enums/Controls/btnType'], (function (exports) {
   'use strict';
-  var defineComponent, ref, watch, openBlock, createBlock, unref, withCtx, createElementBlock, Fragment, renderList, createVNode, computed, createElementVNode, toDisplayString, normalizeClass, createCommentVNode, createTextVNode, normalizeStyle, pushScopeId, popScopeId, onUnmounted, DatePicker, NotificationBox, Panel, useConfigurationValues, useInvokeBlockAction, usePersonPreferences, DropDownList, Modal, DockedPanel, RockButton, BtnType;
+  var defineComponent, ref, watch, openBlock, createBlock, unref, withCtx, createElementBlock, Fragment, renderList, createVNode, onUnmounted, computed, Transition, withModifiers, createElementVNode, toDisplayString, normalizeClass, createCommentVNode, createTextVNode, normalizeStyle, pushScopeId, popScopeId, DatePicker, NotificationBox, Panel, useConfigurationValues, useInvokeBlockAction, usePersonPreferences, DropDownList, Modal, RockButton, BtnType;
   return {
     setters: [function (module) {
       defineComponent = module.defineComponent;
@@ -14,7 +14,10 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
       Fragment = module.Fragment;
       renderList = module.renderList;
       createVNode = module.createVNode;
+      onUnmounted = module.onUnmounted;
       computed = module.computed;
+      Transition = module.Transition;
+      withModifiers = module.withModifiers;
       createElementVNode = module.createElementVNode;
       toDisplayString = module.toDisplayString;
       normalizeClass = module.normalizeClass;
@@ -23,7 +26,6 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
       normalizeStyle = module.normalizeStyle;
       pushScopeId = module.pushScopeId;
       popScopeId = module.popScopeId;
-      onUnmounted = module.onUnmounted;
     }, function (module) {
       DatePicker = module.default;
     }, function (module) {
@@ -38,8 +40,6 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
       DropDownList = module.default;
     }, function (module) {
       Modal = module.default;
-    }, function (module) {
-      DockedPanel = module.default;
     }, function (module) {
       RockButton = module.default;
     }, function (module) {
@@ -210,8 +210,8 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
         class: "ti ti-calendar-time"
       }, null, -1));
       const _hoisted_13$1 = {
-        key: 0,
-        class: "p-spacing-md"
+        key: 1,
+        class: "cci-docked-body p-spacing-md"
       };
       const _hoisted_14$1 = _withScopeId$1(() => createElementVNode("div", {
         class: "text-semibold mb-spacing-xs"
@@ -321,6 +321,32 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
               emit("update:modelValue", value);
             }
           });
+          function onDocumentClick(event) {
+            if (event.target instanceof Element && event.target.closest(".cci-window")) {
+              return;
+            }
+            isVisible.value = false;
+          }
+          function onDocumentKeydown(event) {
+            if (event.key === "Escape") {
+              isVisible.value = false;
+            }
+          }
+          watch(isVisible, value => {
+            if (value) {
+              requestAnimationFrame(() => {
+                document.addEventListener("click", onDocumentClick);
+                document.addEventListener("keydown", onDocumentKeydown);
+              });
+            } else {
+              document.removeEventListener("click", onDocumentClick);
+              document.removeEventListener("keydown", onDocumentKeydown);
+            }
+          });
+          onUnmounted(() => {
+            document.removeEventListener("click", onDocumentClick);
+            document.removeEventListener("keydown", onDocumentKeydown);
+          });
           const sameRoomWindows = computed(() => {
             const current = props.window;
             if (!(current !== null && current !== void 0 && current.locationIdKey)) {
@@ -359,16 +385,16 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
             }
           }
           return (_ctx, _cache) => {
-            return openBlock(), createBlock(unref(DockedPanel), {
-              modelValue: isVisible.value,
-              "onUpdate:modelValue": _cache[4] || (_cache[4] = $event => isVisible.value = $event),
-              width: "420px",
-              canResize: true,
-              closeOnOutsideClick: true
+            return openBlock(), createBlock(Transition, {
+              name: "cci-panel-slide"
             }, {
-              header: withCtx(() => {
-                var _props$window$campus;
-                return [__props.window ? (openBlock(), createElementBlock("div", _hoisted_1$1, [createElementVNode("div", _hoisted_2$1, [createElementVNode("i", {
+              default: withCtx(() => {
+                var _props$window$campus, _props$window$attend, _props$window$softRo, _props$window$firmRo;
+                return [isVisible.value ? (openBlock(), createElementBlock("aside", {
+                  key: 0,
+                  class: "cci-docked-panel",
+                  onClick: _cache[4] || (_cache[4] = withModifiers(() => {}, ["stop"]))
+                }, [__props.window ? (openBlock(), createElementBlock("div", _hoisted_1$1, [createElementVNode("div", _hoisted_2$1, [createElementVNode("i", {
                   class: "ti ti-x cursor-pointer",
                   onClick: _cache[0] || (_cache[0] = $event => isVisible.value = false)
                 })]), createElementVNode("div", _hoisted_3$1, [createElementVNode("div", _hoisted_4$1, [createElementVNode("div", _hoisted_5$1, toDisplayString(__props.window.groupName), 1), createElementVNode("div", _hoisted_6$1, toDisplayString(__props.window.locationName) + " · " + toDisplayString((_props$window$campus = __props.window.campusName) !== null && _props$window$campus !== void 0 ? _props$window$campus : "Unknown campus"), 1), createElementVNode("div", _hoisted_7$1, [createElementVNode("span", {
@@ -400,11 +426,7 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
                 }, {
                   default: withCtx(() => [_hoisted_12$1]),
                   _: 1
-                }, 8, ["btnType"])) : createCommentVNode("v-if", true)])])])) : createCommentVNode("v-if", true)];
-              }),
-              default: withCtx(() => {
-                var _props$window$attend, _props$window$softRo, _props$window$firmRo;
-                return [__props.window ? (openBlock(), createElementBlock("div", _hoisted_13$1, [_hoisted_14$1, createElementVNode("div", _hoisted_15$1, [createElementVNode("div", _hoisted_16$1, [_hoisted_17$1, createElementVNode("span", null, toDisplayString(__props.window.scheduleLabel), 1)]), createElementVNode("div", _hoisted_18$1, [_hoisted_19$1, createElementVNode("span", null, toDisplayString(formatTime(__props.window.checkInStart)) + " – " + toDisplayString(formatTime(__props.window.checkInEnd)), 1)]), createElementVNode("div", _hoisted_20$1, [_hoisted_21$1, createElementVNode("span", null, toDisplayString(formatTime(__props.window.start)) + " – " + toDisplayString(formatTime(__props.window.end)), 1)]), createElementVNode("div", _hoisted_22$1, [_hoisted_23$1, createElementVNode("span", null, toDisplayString(__props.window.templateName), 1)]), createElementVNode("div", _hoisted_24, [_hoisted_25, createElementVNode("span", null, toDisplayString(__props.window.areaPath), 1)])]), _hoisted_26, createElementVNode("div", _hoisted_27, [createElementVNode("div", _hoisted_28, [_hoisted_29, createElementVNode("span", null, [createElementVNode("strong", null, toDisplayString((_props$window$attend = __props.window.attendanceCount) !== null && _props$window$attend !== void 0 ? _props$window$attend : "—"), 1), __props.window.capacity != null ? (openBlock(), createElementBlock(Fragment, {
+                }, 8, ["btnType"])) : createCommentVNode("v-if", true)])])])) : createCommentVNode("v-if", true), __props.window ? (openBlock(), createElementBlock("div", _hoisted_13$1, [_hoisted_14$1, createElementVNode("div", _hoisted_15$1, [createElementVNode("div", _hoisted_16$1, [_hoisted_17$1, createElementVNode("span", null, toDisplayString(__props.window.scheduleLabel), 1)]), createElementVNode("div", _hoisted_18$1, [_hoisted_19$1, createElementVNode("span", null, toDisplayString(formatTime(__props.window.checkInStart)) + " – " + toDisplayString(formatTime(__props.window.checkInEnd)), 1)]), createElementVNode("div", _hoisted_20$1, [_hoisted_21$1, createElementVNode("span", null, toDisplayString(formatTime(__props.window.start)) + " – " + toDisplayString(formatTime(__props.window.end)), 1)]), createElementVNode("div", _hoisted_22$1, [_hoisted_23$1, createElementVNode("span", null, toDisplayString(__props.window.templateName), 1)]), createElementVNode("div", _hoisted_24, [_hoisted_25, createElementVNode("span", null, toDisplayString(__props.window.areaPath), 1)])]), _hoisted_26, createElementVNode("div", _hoisted_27, [createElementVNode("div", _hoisted_28, [_hoisted_29, createElementVNode("span", null, [createElementVNode("strong", null, toDisplayString((_props$window$attend = __props.window.attendanceCount) !== null && _props$window$attend !== void 0 ? _props$window$attend : "—"), 1), __props.window.capacity != null ? (openBlock(), createElementBlock(Fragment, {
                   key: 0
                 }, [createTextVNode(" / " + toDisplayString(__props.window.capacity) + " capacity", 1)], 64)) : createCommentVNode("v-if", true)])]), __props.window.capacity != null && __props.window.attendanceCount != null ? (openBlock(), createElementBlock("div", _hoisted_30, [createElementVNode("div", {
                   class: normalizeClass(["progress-bar", capacityBarClass.value]),
@@ -421,10 +443,10 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
                     }]),
                     onClick: $event => emit('select', other)
                   }, [createElementVNode("span", null, [other.isDoubleBooked && __props.window.isDoubleBooked ? (openBlock(), createElementBlock("i", _hoisted_38)) : createCommentVNode("v-if", true), createTextVNode(" " + toDisplayString(other.groupName), 1)]), createElementVNode("span", _hoisted_39, toDisplayString(formatTime(other.start)) + " – " + toDisplayString(formatTime(other.end)), 1)], 10, _hoisted_37);
-                }), 128))])], 64)) : createCommentVNode("v-if", true)])) : createCommentVNode("v-if", true)];
+                }), 128))])], 64)) : createCommentVNode("v-if", true)])) : createCommentVNode("v-if", true)])) : createCommentVNode("v-if", true)];
               }),
               _: 1
-            }, 8, ["modelValue"]);
+            });
           };
         }
       });
@@ -454,7 +476,7 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
         }
       }
 
-      var css_248z$1 = ".cci-detail-section[data-v-1a056900]{border:1px solid var(--color-interface-soft,#dfe0e1);border-radius:6px;padding:8px 12px}.cci-detail-row[data-v-1a056900]{display:flex;font-size:13px;gap:12px;justify-content:space-between;padding:3px 0}.cci-capacity-bar[data-v-1a056900]{height:8px;margin:4px 0}.cci-same-room-row[data-v-1a056900]{cursor:pointer}.cci-same-room-row[data-v-1a056900]:hover{background:var(--color-interface-softer,#f5f5f5)}.cci-conflict-row[data-v-1a056900]{font-weight:600}";
+      var css_248z$1 = ".cci-docked-panel[data-v-1a056900]{background:var(--color-interface-softest,#fff);border-left:1px solid var(--color-interface-soft,#dfe0e1);bottom:0;box-shadow:-4px 0 16px rgba(0,0,0,.12);display:flex;flex-direction:column;position:fixed;right:0;top:0;width:min(420px,100vw);z-index:1040}.cci-docked-body[data-v-1a056900]{flex:1 1 auto;overflow-y:auto}.cci-panel-slide-enter-active[data-v-1a056900],.cci-panel-slide-leave-active[data-v-1a056900]{transition:transform .2s ease}.cci-panel-slide-enter-from[data-v-1a056900],.cci-panel-slide-leave-to[data-v-1a056900]{transform:translateX(100%)}.cci-detail-section[data-v-1a056900]{border:1px solid var(--color-interface-soft,#dfe0e1);border-radius:6px;padding:8px 12px}.cci-detail-row[data-v-1a056900]{display:flex;font-size:13px;gap:12px;justify-content:space-between;padding:3px 0}.cci-capacity-bar[data-v-1a056900]{height:8px;margin:4px 0}.cci-same-room-row[data-v-1a056900]{cursor:pointer}.cci-same-room-row[data-v-1a056900]:hover{background:var(--color-interface-softer,#f5f5f5)}.cci-conflict-row[data-v-1a056900]{font-weight:600}";
       styleInject(css_248z$1);
 
       script$1.__scopeId = "data-v-1a056900";

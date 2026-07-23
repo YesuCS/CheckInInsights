@@ -116,7 +116,7 @@ Conventions worth knowing:
 - **Filters modal** (`filtersModal.partial.obs`) is generic: an array of `{ key, label, options }` sections rendered as multi-select `DropDownList`s with `enhanceForLongLists` always on. Empty selection = all. Applied selections persist per person as JSON under block preferences (`filter-<key>`); the Timeline's overlap toggle persists under `show-overlap-flags`.
 - **All filtering is client-side.** Blocks load the full dataset (all campuses) once, then filter loaded rows. At our scale (hundreds to low thousands of rows) this is instant and keeps the block actions trivial.
 - **The Timeline** lays windows out on a CSS timeline (percent-positioned blocks, lane-packing for overlaps within a room row), auto-loads on mount, reloads on date change, and when the viewed date is today: draws a now line and re-fetches every 60 seconds. Header controls live in the `Panel`'s `#headerActions` slot styled as `btn btn-grid-action` icons to match Grid header UX.
-- **The detail panel** is built on `@Obsidian/Controls/Internal/dockedPanel.obs`, the same control behind core's Connections Hub request panel. It is an *Internal* control; re-verify after Rock upgrades. (`useVModelPassthrough` trips vue-tsc from a plugin workspace; the panel uses an explicit ref + watch pair instead.)
+- **The detail panel** is a self-contained slide-over (`windowDetailPanel.partial.obs`) styled after core's Connections Hub request panel but with its own markup and CSS, deliberately avoiding Rock's internal `dockedPanel` control (which does not exist in v16 and could change in any release). Closes on outside click and Escape. (`useVModelPassthrough` trips vue-tsc from a plugin workspace; the panel uses an explicit ref + watch pair instead.)
 
 ## Plugin migration
 
@@ -155,5 +155,5 @@ Then restart the Rock app. Frontend-only changes need only a browser refresh; DL
 - **`Group.CampusId` is usually null for check-in groups.** Always go through `GetCampusName`; never filter campus in SQL.
 - **Don't compare check-in windows for conflicts.** They overlap between services by design; compare event times.
 - **`GroupTypeCache.GetCheckInConfiguration` is internal**, so Next-Gen detection falls back to the name heuristic ("NextGen" substring). Revisit when Rock exposes a public discriminator.
-- **`dockedPanel.obs` is a Rock internal control.** The Timeline detail panel depends on it; verify after Rock version upgrades.
+- **No Rock internal Obsidian controls are used.** The Timeline detail panel is self-contained specifically so v16 frameworks (no `dockedPanel`) and future framework churn can't break it.
 - **Block classes and display names diverge** (ScheduleConcurrencyMap = Check-in Timeline, CheckInConfigLint = Check-in Status Overview). GUIDs, not names, are the identity; do not rename-and-re-guid.
