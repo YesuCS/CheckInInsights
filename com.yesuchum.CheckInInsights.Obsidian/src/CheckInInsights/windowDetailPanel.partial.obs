@@ -1,0 +1,237 @@
+<template>
+    <DockedPanel v-model="isVisible"
+                 width="420px"
+                 :canResize="true"
+                 :closeOnOutsideClick="true">
+        <template #header>
+            <div v-if="window" class="bg-interface-softer">
+                <div class="d-flex justify-content-end px-spacing-sm pt-spacing-xs">
+                    <i class="ti ti-x cursor-pointer" @click="isVisible = false"></i>
+                </div>
+                <div class="px-spacing-md py-spacing-xs d-flex align-items-center justify-content-between">
+                    <div class="d-flex flex-column">
+                        <div class="text-interface-stronger text-md text-semibold">{{ window.groupName }}</div>
+                        <div class="text-interface-medium text-sm">{{ window.locationName }} &middot; {{ window.campusName ?? "Unknown campus" }}</div>
+                        <div class="text-interface-medium text-sm">
+                            <span class="label" :class="window.isNextGen ? 'label-success' : 'label-info'">{{ window.isNextGen ? "Next-Gen" : "Legacy" }}</span>
+                            <span v-if="window.isDoubleBooked" class="label label-danger ml-1">Possible double-booking</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-xs">
+                        <RockButton v-if="window.groupUrl"
+                                    :btnType="BtnType.Default"
+                                    isSquare
+                                    title="Open Group"
+                                    @click="open(window.groupUrl)">
+                            <i class="ti ti-users"></i>
+                        </RockButton>
+                        <RockButton v-if="window.locationUrl"
+                                    :btnType="BtnType.Default"
+                                    isSquare
+                                    title="Open Room"
+                                    @click="open(window.locationUrl)">
+                            <i class="ti ti-door"></i>
+                        </RockButton>
+                        <RockButton v-if="window.scheduleUrl"
+                                    :btnType="BtnType.Default"
+                                    isSquare
+                                    title="Open Schedule"
+                                    @click="open(window.scheduleUrl)">
+                            <i class="ti ti-calendar-time"></i>
+                        </RockButton>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <div v-if="window" class="p-spacing-md">
+            <div class="text-semibold mb-spacing-xs">Window Detail</div>
+            <div class="cci-detail-section">
+                <div class="cci-detail-row">
+                    <span class="text-interface-medium">Schedule</span>
+                    <span>{{ window.scheduleLabel }}</span>
+                </div>
+                <div class="cci-detail-row">
+                    <span class="text-interface-medium">Check-in</span>
+                    <span>{{ formatTime(window.checkInStart) }} &ndash; {{ formatTime(window.checkInEnd) }}</span>
+                </div>
+                <div class="cci-detail-row">
+                    <span class="text-interface-medium">Event</span>
+                    <span>{{ formatTime(window.start) }} &ndash; {{ formatTime(window.end) }}</span>
+                </div>
+                <div class="cci-detail-row">
+                    <span class="text-interface-medium">Configuration</span>
+                    <span>{{ window.templateName }}</span>
+                </div>
+                <div class="cci-detail-row">
+                    <span class="text-interface-medium">Area</span>
+                    <span>{{ window.areaPath }}</span>
+                </div>
+            </div>
+
+            <div class="text-semibold mt-spacing-md mb-spacing-xs">Room</div>
+            <div class="cci-detail-section">
+                <div class="cci-detail-row">
+                    <span class="text-interface-medium">Checked in</span>
+                    <span>
+                        <strong>{{ window.attendanceCount ?? "—" }}</strong>
+                        <template v-if="window.capacity != null"> / {{ window.capacity }} capacity</template>
+                    </span>
+                </div>
+                <div v-if="window.capacity != null && window.attendanceCount != null" class="progress cci-capacity-bar">
+                    <div class="progress-bar"
+                         :class="capacityBarClass"
+                         :style="{ width: capacityPct + '%' }"></div>
+                </div>
+                <div class="cci-detail-row">
+                    <span class="text-interface-medium">Soft threshold</span>
+                    <span>{{ window.softRoomThreshold ?? "—" }}</span>
+                </div>
+                <div class="cci-detail-row">
+                    <span class="text-interface-medium">Firm threshold</span>
+                    <span>{{ window.firmRoomThreshold ?? "—" }}</span>
+                </div>
+            </div>
+
+            <template v-if="sameRoomWindows.length > 0">
+                <div class="text-semibold mt-spacing-md mb-spacing-xs">Also in this room today</div>
+                <div class="cci-detail-section">
+                    <div v-for="other in sameRoomWindows"
+                         :key="`${other.groupIdKey}|${other.scheduleIdKey}|${other.checkInStart}`"
+                         class="cci-detail-row cci-same-room-row"
+                         :class="{ 'cci-conflict-row': other.isDoubleBooked && window.isDoubleBooked }"
+                         @click="emit('select', other)">
+                        <span>
+                            <i v-if="other.isDoubleBooked && window.isDoubleBooked" class="ti ti-alert-triangle text-danger"></i>
+                            {{ other.groupName }}
+                        </span>
+                        <span class="text-interface-medium">{{ formatTime(other.start) }} &ndash; {{ formatTime(other.end) }}</span>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </DockedPanel>
+</template>
+
+<style scoped>
+.cci-detail-section {
+    border: 1px solid var(--color-interface-soft, #dfe0e1);
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+
+.cci-detail-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 3px 0;
+    font-size: 13px;
+}
+
+.cci-capacity-bar {
+    height: 8px;
+    margin: 4px 0;
+}
+
+.cci-same-room-row {
+    cursor: pointer;
+}
+
+.cci-same-room-row:hover {
+    background: var(--color-interface-softer, #f5f5f5);
+}
+
+.cci-conflict-row {
+    font-weight: 600;
+}
+</style>
+
+<script setup lang="ts">
+    import { computed, PropType, ref, watch } from "vue";
+    import DockedPanel from "@Obsidian/Controls/Internal/dockedPanel.obs";
+    import RockButton from "@Obsidian/Controls/rockButton.obs";
+    import { BtnType } from "@Obsidian/Enums/Controls/btnType";
+    import type { ScheduleWindowBag } from "./types.partial";
+
+    const props = defineProps({
+        /** Whether the panel is shown. */
+        modelValue: {
+            type: Boolean as PropType<boolean>,
+            required: true
+        },
+
+        /** The window being inspected. */
+        window: {
+            type: Object as PropType<ScheduleWindowBag | null>,
+            default: null
+        },
+
+        /** Every loaded window; used to list other activity in the same room. */
+        allWindows: {
+            type: Array as PropType<ScheduleWindowBag[]>,
+            default: () => []
+        }
+    });
+
+    const emit = defineEmits<{
+        (e: "update:modelValue", value: boolean): void;
+        (e: "select", value: ScheduleWindowBag): void;
+    }>();
+
+    const isVisible = ref(props.modelValue);
+
+    watch(() => props.modelValue, value => {
+        isVisible.value = value;
+    });
+
+    watch(isVisible, value => {
+        if (value !== props.modelValue) {
+            emit("update:modelValue", value);
+        }
+    });
+
+    /** Other windows sharing this window's location on the loaded date. */
+    const sameRoomWindows = computed<ScheduleWindowBag[]>(() => {
+        const current = props.window;
+        if (!current?.locationIdKey) {
+            return [];
+        }
+        return props.allWindows.filter(w =>
+            w.locationIdKey === current.locationIdKey
+            && !(w.groupIdKey === current.groupIdKey
+                && w.scheduleIdKey === current.scheduleIdKey
+                && w.checkInStart === current.checkInStart
+                && w.templateName === current.templateName));
+    });
+
+    const capacityPct = computed<number>(() => {
+        const w = props.window;
+        if (!w || w.capacity == null || !w.capacity || w.attendanceCount == null) {
+            return 0;
+        }
+        return Math.min(100, Math.round((w.attendanceCount / w.capacity) * 100));
+    });
+
+    const capacityBarClass = computed<string>(() => {
+        if (capacityPct.value >= 100) {
+            return "progress-bar-danger";
+        }
+        if (capacityPct.value >= 80) {
+            return "progress-bar-warning";
+        }
+        return "progress-bar-success";
+    });
+
+    function formatTime(iso: string | null | undefined): string {
+        if (!iso) {
+            return "?";
+        }
+        return new Date(iso).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    }
+
+    function open(url: string | null | undefined): void {
+        if (url) {
+            globalThis.location.href = url;
+        }
+    }
+</script>

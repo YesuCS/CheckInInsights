@@ -1,0 +1,86 @@
+<template>
+    <Modal v-model="isOpen"
+           title="Apply Filters"
+           saveText="Apply"
+           @save="onApply">
+        <div v-for="section in sections" :key="section.key">
+            <DropDownList v-model="draft[section.key]"
+                          :label="section.label"
+                          :items="toItems(section.options)"
+                          :multiple="true"
+                          :enhanceForLongLists="true"
+                          :showBlankItem="false"
+                          :help="`Leave empty to include all ${section.label.toLowerCase()}.`" />
+        </div>
+    </Modal>
+</template>
+
+<script setup lang="ts">
+    import { PropType, ref, watch } from "vue";
+    import DropDownList from "@Obsidian/Controls/dropDownList.obs";
+    import Modal from "@Obsidian/Controls/modal.obs";
+    import type { ListItemBag } from "@Obsidian/ViewModels/Utility/listItemBag";
+
+    /** One filterable dimension: a key into the selections record, a label and its option values. */
+    export interface FilterSection {
+        key: string;
+        label: string;
+        options: string[];
+    }
+
+    const props = defineProps({
+        /** Whether the modal is shown. */
+        modelValue: {
+            type: Boolean as PropType<boolean>,
+            default: false
+        },
+
+        /** The filterable dimensions to render, in order. */
+        sections: {
+            type: Array as PropType<FilterSection[]>,
+            required: true
+        },
+
+        /** The applied selections per section key. Empty array = all. */
+        selections: {
+            type: Object as PropType<Record<string, string[]>>,
+            required: true
+        }
+    });
+
+    const emit = defineEmits<{
+        (e: "update:modelValue", value: boolean): void;
+        (e: "update:selections", value: Record<string, string[]>): void;
+    }>();
+
+    const isOpen = ref(props.modelValue);
+    const draft = ref<Record<string, string[]>>({});
+
+    // Re-sync the draft from the applied selections every time the modal opens,
+    // so Cancel discards unapplied edits.
+    watch(() => props.modelValue, value => {
+        isOpen.value = value;
+        if (value) {
+            const next: Record<string, string[]> = {};
+            for (const section of props.sections) {
+                next[section.key] = [...(props.selections[section.key] ?? [])];
+            }
+            draft.value = next;
+        }
+    });
+
+    watch(isOpen, value => {
+        if (value !== props.modelValue) {
+            emit("update:modelValue", value);
+        }
+    });
+
+    function toItems(options: string[]): ListItemBag[] {
+        return options.map(o => ({ value: o, text: o }));
+    }
+
+    function onApply(): void {
+        emit("update:selections", { ...draft.value });
+        isOpen.value = false;
+    }
+</script>

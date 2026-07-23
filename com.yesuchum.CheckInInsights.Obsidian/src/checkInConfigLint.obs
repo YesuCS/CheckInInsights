@@ -1,0 +1,249 @@
+<template>
+    <div>
+        <NotificationBox v-if="errorMessage" alertType="danger" :dismissible="true" @dismiss="errorMessage = ''">
+            {{ errorMessage }}
+        </NotificationBox>
+
+        <NotificationBox v-if="hasLoaded && issues.length === 0" alertType="success">
+            No configuration issues were found. Nice.
+        </NotificationBox>
+
+        <Grid v-if="hasLoaded && issues.length > 0"
+              :data="gridDataSource"
+              keyField="key"
+              itemTerm="Issue"
+              title="Status Overview"
+              stickyHeader
+              liveUpdates
+              gridSettings
+              :gridSettingsActive="hasActiveFilters"
+              :showLaunchWorkflow="false"
+              @gridSettingsClick="isFilterModalOpen = true">
+            <Column name="severity"
+                    title="Severity"
+                    field="severity"
+                    :filter="pickExistingValueFilter"
+                    :filterValue="getSeverityFilterValue"
+                    :quickFilterValue="getSeverityFilterValue"
+                    width="110px"
+                    visiblePriority="xs">
+                <template #format="{ row }">
+                    <span class="label" :class="severityLabelClass(row.severity as string)">{{ row.severity }}</span>
+                </template>
+            </Column>
+
+            <TextColumn name="campusName"
+                        title="Campus"
+                        field="campusName"
+                        :filter="pickExistingValueFilter"
+                        visiblePriority="sm" />
+
+            <TextColumn name="rule"
+                        title="Rule"
+                        field="rule"
+                        :filter="pickExistingValueFilter"
+                        visiblePriority="xs" />
+
+            <TextColumn name="templateName"
+                        title="Configuration"
+                        field="templateName"
+                        :filter="pickExistingValueFilter"
+                        visiblePriority="md" />
+
+            <TextColumn name="areaPath"
+                        title="Area"
+                        field="areaPath"
+                        :filter="textValueFilter"
+                        visiblePriority="sm" />
+
+            <Column name="groupName"
+                    title="Group"
+                    field="groupName"
+                    :filter="pickExistingValueFilter"
+                    :filterValue="getTextFilterValue('groupName')"
+                    :quickFilterValue="getTextFilterValue('groupName')"
+                    visiblePriority="xs">
+                <template #format="{ row }">
+                    <a v-if="row.groupUrl" :href="row.groupUrl as string" @click.stop>{{ row.groupName }} <i class="ti ti-external-link"></i></a>
+                    <span v-else>{{ row.groupName }}</span>
+                </template>
+            </Column>
+
+            <Column name="locationName"
+                    title="Location"
+                    field="locationName"
+                    :filter="pickExistingValueFilter"
+                    :filterValue="getTextFilterValue('locationName')"
+                    :quickFilterValue="getTextFilterValue('locationName')"
+                    visiblePriority="xs">
+                <template #format="{ row }">
+                    <a v-if="row.locationUrl" :href="row.locationUrl as string" @click.stop>{{ row.locationName }} <i class="ti ti-external-link"></i></a>
+                    <span v-else>{{ row.locationName }}</span>
+                </template>
+            </Column>
+
+            <Column name="scheduleLabel"
+                    title="Schedule"
+                    field="scheduleLabel"
+                    :filter="pickExistingValueFilter"
+                    :filterValue="getTextFilterValue('scheduleLabel')"
+                    :quickFilterValue="getTextFilterValue('scheduleLabel')"
+                    visiblePriority="md">
+                <template #format="{ row }">
+                    <a v-if="row.scheduleUrl" :href="row.scheduleUrl as string" @click.stop>{{ row.scheduleLabel }} <i class="ti ti-external-link"></i></a>
+                    <span v-else>{{ row.scheduleLabel }}</span>
+                </template>
+            </Column>
+
+            <TextColumn name="detail"
+                        title="Detail"
+                        field="detail"
+                        width="30%"
+                        visiblePriority="lg" />
+        </Grid>
+
+        <FiltersModal v-model="isFilterModalOpen"
+                      :sections="filterSections"
+                      v-model:selections="filterSelections" />
+    </div>
+</template>
+
+
+<script setup lang="ts">
+    import { computed, ref, watch } from "vue";
+    import NotificationBox from "@Obsidian/Controls/notificationBox.obs";
+    import Grid, {
+        Column,
+        TextColumn,
+        textValueFilter,
+        pickExistingValueFilter
+    } from "@Obsidian/Controls/grid";
+    import { useConfigurationValues, useInvokeBlockAction, usePersonPreferences } from "@Obsidian/Utility/block";
+    import type { GridDataBag } from "@Obsidian/ViewModels/Core/Grid/gridDataBag";
+    import FiltersModal, { FilterSection } from "./CheckInInsights/filtersModal.partial.obs";
+    import type { CheckInInsightsInitBag, LintIssueBag, LintResultBag } from "./CheckInInsights/types.partial";
+
+    useConfigurationValues<CheckInInsightsInitBag>();
+    const invokeBlockAction = useInvokeBlockAction();
+
+    const isLoading = ref(false);
+    const hasLoaded = ref(false);
+    const errorMessage = ref("");
+    const issues = ref<LintIssueBag[]>([]);
+
+    // #region Filters
+
+    const NO_CAMPUS = "No campus";
+
+    const isFilterModalOpen = ref(false);
+
+    const preferences = usePersonPreferences().blockPreferences;
+    const filterKeys = ["campus", "severity", "rule", "area"];
+
+    /** Restores saved selections (JSON arrays) from person preferences. */
+    function loadSavedSelections(): Record<string, string[]> {
+        const result: Record<string, string[]> = {};
+        for (const key of filterKeys) {
+            try {
+                const parsed = JSON.parse(preferences.getValue(`filter-${key}`) || "[]");
+                result[key] = Array.isArray(parsed) ? parsed : [];
+            }
+            catch {
+                result[key] = [];
+            }
+        }
+        return result;
+    }
+
+    /** Applied modal selections per dimension. Empty array = all. Persisted per person. */
+    const filterSelections = ref<Record<string, string[]>>(loadSavedSelections());
+
+    watch(filterSelections, async () => {
+        for (const key of filterKeys) {
+            preferences.setValue(`filter-${key}`, JSON.stringify(filterSelections.value[key] ?? []));
+        }
+        await preferences.save();
+    });
+
+    function distinct(values: (string | null | undefined)[], fallback: string): string[] {
+        return [...new Set(values.map(v => v ?? fallback))].sort();
+    }
+
+    const filterSections = computed<FilterSection[]>(() => [
+        { key: "campus", label: "Campuses", options: distinct(issues.value.map(i => i.campusName), NO_CAMPUS) },
+        { key: "severity", label: "Severities", options: ["Error", "Warning", "Info"] },
+        { key: "rule", label: "Rules", options: distinct(issues.value.map(i => i.rule), "") },
+        { key: "area", label: "Group Types", options: distinct(issues.value.map(i => i.areaPath), "") }
+    ]);
+
+    function passes(selection: string[], value: string): boolean {
+        return selection.length === 0 || selection.includes(value);
+    }
+
+    const filteredIssues = computed<LintIssueBag[]>(() => {
+        const f = filterSelections.value;
+        return issues.value.filter(i =>
+            passes(f.campus ?? [], i.campusName ?? NO_CAMPUS)
+            && passes(f.severity ?? [], i.severity ?? "")
+            && passes(f.rule ?? [], i.rule ?? "")
+            && passes(f.area ?? [], i.areaPath ?? ""));
+    });
+
+    const hasActiveFilters = computed<boolean>(() => {
+        return Object.values(filterSelections.value).some(s => s.length > 0);
+    });
+
+    // #endregion
+
+    // #region Grid data
+
+    const gridDataSource = ref<Promise<GridDataBag>>(Promise.resolve({ rows: [] }));
+
+    watch(filteredIssues, rows => {
+        gridDataSource.value = Promise.resolve({
+            rows: rows.map((issue, index) => ({ key: String(index), ...issue }))
+        });
+    });
+
+    function severityLabelClass(severity: string): string {
+        if (severity === "Error") {
+            return "label-danger";
+        }
+        if (severity === "Warning") {
+            return "label-warning";
+        }
+        return "label-info";
+    }
+
+    function getSeverityFilterValue(row: Record<string, unknown>): string {
+        return row.severity as string;
+    }
+
+    function getTextFilterValue(field: string): (row: Record<string, unknown>) => string {
+        return row => (row[field] as string) ?? "";
+    }
+
+    // #endregion
+
+    async function load(): Promise<void> {
+        errorMessage.value = "";
+        isLoading.value = true;
+        try {
+            // No campus in the request = all campuses; scoping happens client-side.
+            const response = await invokeBlockAction<LintResultBag>("GetLintIssues", { filter: {} });
+
+            if (response.isSuccess && response.data) {
+                issues.value = response.data.issues ?? [];
+                hasLoaded.value = true;
+            }
+            else {
+                errorMessage.value = response.errorMessage ?? "Unable to scan check-in configuration.";
+            }
+        }
+        finally {
+            isLoading.value = false;
+        }
+    }
+
+    load();
+</script>

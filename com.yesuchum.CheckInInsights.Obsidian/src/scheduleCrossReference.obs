@@ -1,0 +1,232 @@
+<template>
+    <div>
+        <NotificationBox v-if="errorMessage" alertType="danger" :dismissible="true" @dismiss="errorMessage = ''">
+            {{ errorMessage }}
+        </NotificationBox>
+
+        <NotificationBox v-if="hasLoaded && assignments.length === 0" alertType="info">
+            No check-in group / location / schedule assignments were found.
+        </NotificationBox>
+
+        <Grid v-if="hasLoaded && assignments.length > 0"
+              :data="gridDataSource"
+              keyField="key"
+              itemTerm="Pairing"
+              title="Rooms &amp; Schedules"
+              stickyHeader
+              liveUpdates
+              gridSettings
+              :gridSettingsActive="hasActiveFilters"
+              :showLaunchWorkflow="false"
+              @gridSettingsClick="isFilterModalOpen = true">
+            <TextColumn name="campusName"
+                        title="Campus"
+                        field="campusName"
+                        :filter="pickExistingValueFilter"
+                        visiblePriority="sm" />
+
+            <TextColumn name="templateName"
+                        title="Configuration"
+                        field="templateName"
+                        :filter="pickExistingValueFilter"
+                        visiblePriority="md" />
+
+            <TextColumn name="areaPath"
+                        title="Area"
+                        field="areaPath"
+                        :filter="pickExistingValueFilter"
+                        visiblePriority="sm" />
+
+            <Column name="groupName"
+                    title="Group"
+                    field="groupName"
+                    :filter="pickExistingValueFilter"
+                    :filterValue="getGroupFilterValue"
+                    :quickFilterValue="getGroupFilterValue"
+                    visiblePriority="xs">
+                <template #format="{ row }">
+                    <a v-if="row.groupUrl" :href="row.groupUrl as string" @click.stop>{{ row.groupName }} <i class="ti ti-external-link"></i></a>
+                    <span v-else>{{ row.groupName }}</span>
+                </template>
+            </Column>
+
+            <Column name="locationName"
+                    title="Location"
+                    field="locationName"
+                    :filter="pickExistingValueFilter"
+                    :filterValue="getLocationFilterValue"
+                    :quickFilterValue="getLocationFilterValue"
+                    visiblePriority="xs">
+                <template #format="{ row }">
+                    <a v-if="row.locationName && row.locationUrl" :href="row.locationUrl as string" @click.stop>{{ row.locationName }} <i class="ti ti-external-link"></i></a>
+                    <span v-else-if="row.locationName">{{ row.locationName }}</span>
+                    <span v-else class="label label-danger">No location</span>
+                </template>
+            </Column>
+
+            <Column name="scheduleLabel"
+                    title="Schedule"
+                    field="scheduleLabel"
+                    :filter="pickExistingValueFilter"
+                    :filterValue="getScheduleFilterValue"
+                    :quickFilterValue="getScheduleFilterValue"
+                    visiblePriority="xs">
+                <template #format="{ row }">
+                    <a v-if="row.scheduleLabel && row.scheduleUrl" :href="row.scheduleUrl as string" @click.stop>{{ row.scheduleLabel }} <i class="ti ti-external-link"></i></a>
+                    <span v-else-if="row.scheduleLabel">{{ row.scheduleLabel }}</span>
+                    <span v-else class="label label-warning">No schedule</span>
+                </template>
+            </Column>
+
+            <Column name="capacity"
+                    title="Capacity"
+                    field="capacity"
+                    width="130px"
+                    visiblePriority="md">
+                <template #format="{ row }">
+                    <span v-if="row.capacity != null" title="Capacity set on this group + room + schedule pairing.">{{ row.capacity }}</span>
+                    <span v-else-if="row.roomCapacity != null" class="text-muted" title="No capacity on this pairing; showing the room's own threshold.">{{ row.roomCapacity }} (room)</span>
+                </template>
+            </Column>
+        </Grid>
+
+        <FiltersModal v-model="isFilterModalOpen"
+                      :sections="filterSections"
+                      v-model:selections="filterSelections" />
+    </div>
+</template>
+
+
+<script setup lang="ts">
+    import { computed, ref, watch } from "vue";
+    import NotificationBox from "@Obsidian/Controls/notificationBox.obs";
+    import Grid, {
+        Column,
+        TextColumn,
+        pickExistingValueFilter
+    } from "@Obsidian/Controls/grid";
+    import { useConfigurationValues, useInvokeBlockAction, usePersonPreferences } from "@Obsidian/Utility/block";
+    import type { GridDataBag } from "@Obsidian/ViewModels/Core/Grid/gridDataBag";
+    import FiltersModal, { FilterSection } from "./CheckInInsights/filtersModal.partial.obs";
+    import type { CheckInInsightsInitBag, ScheduleAssignmentBag, XrefResultBag } from "./CheckInInsights/types.partial";
+
+    useConfigurationValues<CheckInInsightsInitBag>();
+    const invokeBlockAction = useInvokeBlockAction();
+
+    const isLoading = ref(false);
+    const hasLoaded = ref(false);
+    const errorMessage = ref("");
+    const assignments = ref<ScheduleAssignmentBag[]>([]);
+
+    // #region Filters
+
+    const NO_CAMPUS = "No campus";
+    const NO_LOCATION = "No location";
+    const NO_SCHEDULE = "No schedule";
+
+    const isFilterModalOpen = ref(false);
+
+    const preferences = usePersonPreferences().blockPreferences;
+    const filterKeys = ["campus", "schedule", "location", "area"];
+
+    /** Restores saved selections (JSON arrays) from person preferences. */
+    function loadSavedSelections(): Record<string, string[]> {
+        const result: Record<string, string[]> = {};
+        for (const key of filterKeys) {
+            try {
+                const parsed = JSON.parse(preferences.getValue(`filter-${key}`) || "[]");
+                result[key] = Array.isArray(parsed) ? parsed : [];
+            }
+            catch {
+                result[key] = [];
+            }
+        }
+        return result;
+    }
+
+    /** Applied modal selections per dimension. Empty array = all. Persisted per person. */
+    const filterSelections = ref<Record<string, string[]>>(loadSavedSelections());
+
+    watch(filterSelections, async () => {
+        for (const key of filterKeys) {
+            preferences.setValue(`filter-${key}`, JSON.stringify(filterSelections.value[key] ?? []));
+        }
+        await preferences.save();
+    });
+
+    function distinct(values: (string | null | undefined)[], fallback: string): string[] {
+        return [...new Set(values.map(v => v ?? fallback))].sort();
+    }
+
+    const filterSections = computed<FilterSection[]>(() => [
+        { key: "campus", label: "Campuses", options: distinct(assignments.value.map(a => a.campusName), NO_CAMPUS) },
+        { key: "schedule", label: "Schedules", options: distinct(assignments.value.map(a => a.scheduleLabel), NO_SCHEDULE) },
+        { key: "location", label: "Locations", options: distinct(assignments.value.map(a => a.locationName), NO_LOCATION) },
+        { key: "area", label: "Group Types", options: distinct(assignments.value.map(a => a.areaPath), "") }
+    ]);
+
+    function passes(selection: string[], value: string): boolean {
+        return selection.length === 0 || selection.includes(value);
+    }
+
+    const filteredAssignments = computed<ScheduleAssignmentBag[]>(() => {
+        const f = filterSelections.value;
+        return assignments.value.filter(a =>
+            passes(f.campus ?? [], a.campusName ?? NO_CAMPUS)
+            && passes(f.schedule ?? [], a.scheduleLabel ?? NO_SCHEDULE)
+            && passes(f.location ?? [], a.locationName ?? NO_LOCATION)
+            && passes(f.area ?? [], a.areaPath ?? ""));
+    });
+
+    const hasActiveFilters = computed<boolean>(() => {
+        return Object.values(filterSelections.value).some(s => s.length > 0);
+    });
+
+    // #endregion
+
+    // #region Grid data
+
+    const gridDataSource = ref<Promise<GridDataBag>>(Promise.resolve({ rows: [] }));
+
+    watch(filteredAssignments, rows => {
+        gridDataSource.value = Promise.resolve({
+            rows: rows.map((assignment, index) => ({ key: String(index), ...assignment }))
+        });
+    });
+
+    function getGroupFilterValue(row: Record<string, unknown>): string {
+        return (row.groupName as string) ?? "";
+    }
+
+    function getLocationFilterValue(row: Record<string, unknown>): string {
+        return (row.locationName as string) ?? NO_LOCATION;
+    }
+
+    function getScheduleFilterValue(row: Record<string, unknown>): string {
+        return (row.scheduleLabel as string) ?? NO_SCHEDULE;
+    }
+
+    // #endregion
+
+    async function load(): Promise<void> {
+        errorMessage.value = "";
+        isLoading.value = true;
+        try {
+            // No campus in the request = all campuses; scoping happens client-side.
+            const response = await invokeBlockAction<XrefResultBag>("GetAssignments", { filter: {} });
+
+            if (response.isSuccess && response.data) {
+                assignments.value = response.data.assignments ?? [];
+                hasLoaded.value = true;
+            }
+            else {
+                errorMessage.value = response.errorMessage ?? "Unable to load assignments.";
+            }
+        }
+        finally {
+            isLoading.value = false;
+        }
+    }
+
+    load();
+</script>
