@@ -154,6 +154,5 @@ Then restart the Rock app. Frontend-only changes need only a browser refresh; DL
 - **`Schedule.Name` is usually null.** Always go through `GetScheduleLabel`.
 - **`Group.CampusId` is usually null for check-in groups.** Always go through `GetCampusName`; never filter campus in SQL.
 - **Don't compare check-in windows for conflicts.** They overlap between services by design; compare event times.
-- **`GroupTypeCache.GetCheckInConfiguration` is internal**, so Next-Gen detection falls back to the name heuristic ("NextGen" substring). Revisit when Rock exposes a public discriminator.
 - **No Rock internal Obsidian controls are used.** The Timeline detail panel is self-contained specifically so v16 frameworks (no `dockedPanel`) and future framework churn can't break it.
 - **Block classes and display names diverge** (ScheduleConcurrencyMap = Check-in Timeline, CheckInConfigLint = Check-in Status Overview). GUIDs, not names, are the identity; do not rename-and-re-guid.

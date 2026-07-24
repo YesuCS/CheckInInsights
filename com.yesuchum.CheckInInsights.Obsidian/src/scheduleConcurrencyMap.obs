@@ -41,10 +41,8 @@
                            @select="onSelectWindow" />
 
         <div v-if="hasWindows">
-            <div class="cci-legend">
-                <span class="cci-legend-item"><span class="cci-swatch cci-swatch-legacy"></span> Legacy check-in</span>
-                <span class="cci-legend-item"><span class="cci-swatch cci-swatch-nextgen"></span> Next-Gen check-in</span>
-                <span v-if="isOverlapFlagShown" class="cci-legend-item"><span class="cci-swatch cci-swatch-double"></span> Possible double-booking</span>
+            <div v-if="isOverlapFlagShown" class="cci-legend">
+                <span class="cci-legend-item"><span class="cci-swatch cci-swatch-double"></span> Possible double-booking</span>
             </div>
 
             <div class="cci-timeline" :style="{ '--cci-hours': hourSpan }">
@@ -75,10 +73,7 @@
                             <div v-for="block in row.blocks"
                                  :key="block.key"
                                  class="cci-window"
-                                 :class="{
-                                     'cci-window-nextgen': block.window.isNextGen,
-                                     'cci-window-double': isOverlapFlagShown && block.window.isDoubleBooked
-                                 }"
+                                 :class="{ 'cci-window-double': isOverlapFlagShown && block.window.isDoubleBooked }"
                                  :style="{ left: block.left, width: block.width, top: (block.lane * 30) + 'px' }"
                                  :title="blockTooltip(block.window)"
                                  @click="onSelectWindow(block.window)">
@@ -113,6 +108,22 @@
     width: 160px;
 }
 
+/* btn-grid-action styling is scoped to the Grid's header in Rock's themes, so
+   restate it here theme-aware for both light and dark. */
+.cci-header-actions .btn-grid-action {
+    background: transparent;
+    border: 0;
+    color: var(--color-interface-strong, #495057);
+}
+
+.cci-header-actions .btn-grid-action:hover {
+    color: var(--color-interface-stronger, #212529);
+}
+
+.cci-header-actions .btn-grid-action.active {
+    color: var(--color-primary, #ee7725);
+}
+
 .cci-legend {
     display: flex;
     align-items: center;
@@ -135,16 +146,8 @@
     border-radius: 3px;
 }
 
-.cci-swatch-legacy {
-    background: #6b8fc9;
-}
-
-.cci-swatch-nextgen {
-    background: #5cb85c;
-}
-
 .cci-swatch-double {
-    background: #fff;
+    background: transparent;
     border: 2px solid #d9534f;
 }
 
@@ -190,7 +193,8 @@
     position: relative;
     flex: 1 1 auto;
     min-height: 30px;
-    background-image: repeating-linear-gradient(to right, transparent, transparent calc(100% / var(--cci-hours) - 1px), rgba(0, 0, 0, 0.06) calc(100% / var(--cci-hours) - 1px), rgba(0, 0, 0, 0.06) calc(100% / var(--cci-hours)));
+    /* Neutral gray so the hour gridlines read in both light and dark themes. */
+    background-image: repeating-linear-gradient(to right, transparent, transparent calc(100% / var(--cci-hours) - 1px), rgba(128, 128, 128, 0.18) calc(100% / var(--cci-hours) - 1px), rgba(128, 128, 128, 0.18) calc(100% / var(--cci-hours)));
 }
 
 .cci-hours-row .cci-row-track {
@@ -242,10 +246,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.cci-window-nextgen {
-    background: #5cb85c;
 }
 
 .cci-window-double {

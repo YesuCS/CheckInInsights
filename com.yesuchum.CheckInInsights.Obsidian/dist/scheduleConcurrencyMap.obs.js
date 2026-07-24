@@ -1,6 +1,6 @@
 System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls/notificationBox.obs', '@Obsidian/Controls/panel.obs', '@Obsidian/Utility/block', '@Obsidian/Controls/dropDownList.obs', '@Obsidian/Controls/modal.obs', '@Obsidian/Controls/rockButton.obs', '@Obsidian/Enums/Controls/btnType'], (function (exports) {
   'use strict';
-  var defineComponent, ref, watch, openBlock, createBlock, unref, withCtx, createElementBlock, Fragment, renderList, createVNode, onUnmounted, computed, Transition, withModifiers, createElementVNode, toDisplayString, normalizeClass, createCommentVNode, createTextVNode, normalizeStyle, pushScopeId, popScopeId, DatePicker, NotificationBox, Panel, useConfigurationValues, useInvokeBlockAction, usePersonPreferences, DropDownList, Modal, RockButton, BtnType;
+  var defineComponent, ref, watch, openBlock, createBlock, unref, withCtx, createElementBlock, Fragment, renderList, createVNode, onUnmounted, computed, Transition, withModifiers, createElementVNode, toDisplayString, createCommentVNode, createTextVNode, normalizeClass, normalizeStyle, pushScopeId, popScopeId, DatePicker, NotificationBox, Panel, useConfigurationValues, useInvokeBlockAction, usePersonPreferences, DropDownList, Modal, RockButton, BtnType;
   return {
     setters: [function (module) {
       defineComponent = module.defineComponent;
@@ -20,9 +20,9 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
       withModifiers = module.withModifiers;
       createElementVNode = module.createElementVNode;
       toDisplayString = module.toDisplayString;
-      normalizeClass = module.normalizeClass;
       createCommentVNode = module.createCommentVNode;
       createTextVNode = module.createTextVNode;
+      normalizeClass = module.normalizeClass;
       normalizeStyle = module.normalizeStyle;
       pushScopeId = module.pushScopeId;
       popScopeId = module.popScopeId;
@@ -191,104 +191,105 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
         class: "text-interface-medium text-sm"
       };
       const _hoisted_7$1 = {
+        key: 0,
         class: "text-interface-medium text-sm"
       };
-      const _hoisted_8$1 = {
-        key: 0,
-        class: "label label-danger ml-1"
-      };
-      const _hoisted_9$1 = {
+      const _hoisted_8$1 = _withScopeId$1(() => createElementVNode("span", {
+        class: "label label-danger"
+      }, "Possible double-booking", -1));
+      const _hoisted_9$1 = [_hoisted_8$1];
+      const _hoisted_10$1 = {
         class: "d-flex gap-xs"
       };
-      const _hoisted_10$1 = _withScopeId$1(() => createElementVNode("i", {
+      const _hoisted_11$1 = _withScopeId$1(() => createElementVNode("i", {
         class: "ti ti-users"
       }, null, -1));
-      const _hoisted_11$1 = _withScopeId$1(() => createElementVNode("i", {
+      const _hoisted_12$1 = _withScopeId$1(() => createElementVNode("i", {
         class: "ti ti-door"
       }, null, -1));
-      const _hoisted_12$1 = _withScopeId$1(() => createElementVNode("i", {
+      const _hoisted_13$1 = _withScopeId$1(() => createElementVNode("i", {
         class: "ti ti-calendar-time"
       }, null, -1));
-      const _hoisted_13$1 = {
+      const _hoisted_14$1 = {
         key: 1,
         class: "cci-docked-body p-spacing-md"
       };
-      const _hoisted_14$1 = _withScopeId$1(() => createElementVNode("div", {
+      const _hoisted_15$1 = _withScopeId$1(() => createElementVNode("div", {
         class: "text-semibold mb-spacing-xs"
       }, "Window Detail", -1));
-      const _hoisted_15$1 = {
+      const _hoisted_16$1 = {
         class: "cci-detail-section"
       };
-      const _hoisted_16$1 = {
+      const _hoisted_17$1 = {
         class: "cci-detail-row"
       };
-      const _hoisted_17$1 = _withScopeId$1(() => createElementVNode("span", {
+      const _hoisted_18$1 = _withScopeId$1(() => createElementVNode("span", {
         class: "text-interface-medium"
       }, "Schedule", -1));
-      const _hoisted_18$1 = {
+      const _hoisted_19$1 = {
         class: "cci-detail-row"
       };
-      const _hoisted_19$1 = _withScopeId$1(() => createElementVNode("span", {
+      const _hoisted_20$1 = _withScopeId$1(() => createElementVNode("span", {
         class: "text-interface-medium"
       }, "Check-in", -1));
-      const _hoisted_20$1 = {
+      const _hoisted_21$1 = {
         class: "cci-detail-row"
       };
-      const _hoisted_21$1 = _withScopeId$1(() => createElementVNode("span", {
+      const _hoisted_22 = _withScopeId$1(() => createElementVNode("span", {
         class: "text-interface-medium"
       }, "Event", -1));
-      const _hoisted_22$1 = {
+      const _hoisted_23 = {
         class: "cci-detail-row"
       };
-      const _hoisted_23$1 = _withScopeId$1(() => createElementVNode("span", {
+      const _hoisted_24 = _withScopeId$1(() => createElementVNode("span", {
         class: "text-interface-medium"
       }, "Configuration", -1));
-      const _hoisted_24 = {
+      const _hoisted_25 = {
         class: "cci-detail-row"
       };
-      const _hoisted_25 = _withScopeId$1(() => createElementVNode("span", {
+      const _hoisted_26 = _withScopeId$1(() => createElementVNode("span", {
         class: "text-interface-medium"
       }, "Area", -1));
-      const _hoisted_26 = _withScopeId$1(() => createElementVNode("div", {
+      const _hoisted_27 = _withScopeId$1(() => createElementVNode("div", {
         class: "text-semibold mt-spacing-md mb-spacing-xs"
       }, "Room", -1));
-      const _hoisted_27 = {
+      const _hoisted_28 = {
         class: "cci-detail-section"
       };
-      const _hoisted_28 = {
+      const _hoisted_29 = {
         class: "cci-detail-row"
       };
-      const _hoisted_29 = _withScopeId$1(() => createElementVNode("span", {
+      const _hoisted_30 = _withScopeId$1(() => createElementVNode("span", {
         class: "text-interface-medium"
       }, "Checked in", -1));
-      const _hoisted_30 = {
+      const _hoisted_31 = {
         key: 0,
         class: "progress cci-capacity-bar"
       };
-      const _hoisted_31 = {
+      const _hoisted_32 = {
         class: "cci-detail-row"
       };
-      const _hoisted_32 = _withScopeId$1(() => createElementVNode("span", {
+      const _hoisted_33 = _withScopeId$1(() => createElementVNode("span", {
         class: "text-interface-medium"
       }, "Soft threshold", -1));
-      const _hoisted_33 = {
+      const _hoisted_34 = {
         class: "cci-detail-row"
       };
-      const _hoisted_34 = _withScopeId$1(() => createElementVNode("span", {
+      const _hoisted_35 = _withScopeId$1(() => createElementVNode("span", {
         class: "text-interface-medium"
       }, "Firm threshold", -1));
-      const _hoisted_35 = _withScopeId$1(() => createElementVNode("div", {
+      const _hoisted_36 = _withScopeId$1(() => createElementVNode("div", {
         class: "text-semibold mt-spacing-md mb-spacing-xs"
       }, "Also in this room today", -1));
-      const _hoisted_36 = {
+      const _hoisted_37 = {
         class: "cci-detail-section"
       };
-      const _hoisted_37 = ["onClick"];
-      const _hoisted_38 = {
+      const _hoisted_38 = ["onClick"];
+      const _hoisted_39 = {
         key: 0,
         class: "ti ti-alert-triangle text-danger"
       };
-      const _hoisted_39 = {
+      const _hoisted_40 = {
         class: "text-interface-medium"
       };
       var script$1 = defineComponent({
@@ -397,16 +398,14 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
                 }, [__props.window ? (openBlock(), createElementBlock("div", _hoisted_1$1, [createElementVNode("div", _hoisted_2$1, [createElementVNode("i", {
                   class: "ti ti-x cursor-pointer",
                   onClick: _cache[0] || (_cache[0] = $event => isVisible.value = false)
-                })]), createElementVNode("div", _hoisted_3$1, [createElementVNode("div", _hoisted_4$1, [createElementVNode("div", _hoisted_5$1, toDisplayString(__props.window.groupName), 1), createElementVNode("div", _hoisted_6$1, toDisplayString(__props.window.locationName) + " · " + toDisplayString((_props$window$campus = __props.window.campusName) !== null && _props$window$campus !== void 0 ? _props$window$campus : "Unknown campus"), 1), createElementVNode("div", _hoisted_7$1, [createElementVNode("span", {
-                  class: normalizeClass(["label", __props.window.isNextGen ? 'label-success' : 'label-info'])
-                }, toDisplayString(__props.window.isNextGen ? "Next-Gen" : "Legacy"), 3), __props.window.isDoubleBooked ? (openBlock(), createElementBlock("span", _hoisted_8$1, "Possible double-booking")) : createCommentVNode("v-if", true)])]), createElementVNode("div", _hoisted_9$1, [__props.window.groupUrl ? (openBlock(), createBlock(unref(RockButton), {
+                })]), createElementVNode("div", _hoisted_3$1, [createElementVNode("div", _hoisted_4$1, [createElementVNode("div", _hoisted_5$1, toDisplayString(__props.window.groupName), 1), createElementVNode("div", _hoisted_6$1, toDisplayString(__props.window.locationName) + " · " + toDisplayString((_props$window$campus = __props.window.campusName) !== null && _props$window$campus !== void 0 ? _props$window$campus : "Unknown campus"), 1), __props.window.isDoubleBooked ? (openBlock(), createElementBlock("div", _hoisted_7$1, [..._hoisted_9$1])) : createCommentVNode("v-if", true)]), createElementVNode("div", _hoisted_10$1, [__props.window.groupUrl ? (openBlock(), createBlock(unref(RockButton), {
                   key: 0,
                   btnType: unref(BtnType).Default,
                   isSquare: "",
                   title: "Open Group",
                   onClick: _cache[1] || (_cache[1] = $event => open(__props.window.groupUrl))
                 }, {
-                  default: withCtx(() => [_hoisted_10$1]),
+                  default: withCtx(() => [_hoisted_11$1]),
                   _: 1
                 }, 8, ["btnType"])) : createCommentVNode("v-if", true), __props.window.locationUrl ? (openBlock(), createBlock(unref(RockButton), {
                   key: 1,
@@ -415,7 +414,7 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
                   title: "Open Room",
                   onClick: _cache[2] || (_cache[2] = $event => open(__props.window.locationUrl))
                 }, {
-                  default: withCtx(() => [_hoisted_11$1]),
+                  default: withCtx(() => [_hoisted_12$1]),
                   _: 1
                 }, 8, ["btnType"])) : createCommentVNode("v-if", true), __props.window.scheduleUrl ? (openBlock(), createBlock(unref(RockButton), {
                   key: 2,
@@ -424,25 +423,25 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
                   title: "Open Schedule",
                   onClick: _cache[3] || (_cache[3] = $event => open(__props.window.scheduleUrl))
                 }, {
-                  default: withCtx(() => [_hoisted_12$1]),
+                  default: withCtx(() => [_hoisted_13$1]),
                   _: 1
-                }, 8, ["btnType"])) : createCommentVNode("v-if", true)])])])) : createCommentVNode("v-if", true), __props.window ? (openBlock(), createElementBlock("div", _hoisted_13$1, [_hoisted_14$1, createElementVNode("div", _hoisted_15$1, [createElementVNode("div", _hoisted_16$1, [_hoisted_17$1, createElementVNode("span", null, toDisplayString(__props.window.scheduleLabel), 1)]), createElementVNode("div", _hoisted_18$1, [_hoisted_19$1, createElementVNode("span", null, toDisplayString(formatTime(__props.window.checkInStart)) + " – " + toDisplayString(formatTime(__props.window.checkInEnd)), 1)]), createElementVNode("div", _hoisted_20$1, [_hoisted_21$1, createElementVNode("span", null, toDisplayString(formatTime(__props.window.start)) + " – " + toDisplayString(formatTime(__props.window.end)), 1)]), createElementVNode("div", _hoisted_22$1, [_hoisted_23$1, createElementVNode("span", null, toDisplayString(__props.window.templateName), 1)]), createElementVNode("div", _hoisted_24, [_hoisted_25, createElementVNode("span", null, toDisplayString(__props.window.areaPath), 1)])]), _hoisted_26, createElementVNode("div", _hoisted_27, [createElementVNode("div", _hoisted_28, [_hoisted_29, createElementVNode("span", null, [createElementVNode("strong", null, toDisplayString((_props$window$attend = __props.window.attendanceCount) !== null && _props$window$attend !== void 0 ? _props$window$attend : "—"), 1), __props.window.capacity != null ? (openBlock(), createElementBlock(Fragment, {
+                }, 8, ["btnType"])) : createCommentVNode("v-if", true)])])])) : createCommentVNode("v-if", true), __props.window ? (openBlock(), createElementBlock("div", _hoisted_14$1, [_hoisted_15$1, createElementVNode("div", _hoisted_16$1, [createElementVNode("div", _hoisted_17$1, [_hoisted_18$1, createElementVNode("span", null, toDisplayString(__props.window.scheduleLabel), 1)]), createElementVNode("div", _hoisted_19$1, [_hoisted_20$1, createElementVNode("span", null, toDisplayString(formatTime(__props.window.checkInStart)) + " – " + toDisplayString(formatTime(__props.window.checkInEnd)), 1)]), createElementVNode("div", _hoisted_21$1, [_hoisted_22, createElementVNode("span", null, toDisplayString(formatTime(__props.window.start)) + " – " + toDisplayString(formatTime(__props.window.end)), 1)]), createElementVNode("div", _hoisted_23, [_hoisted_24, createElementVNode("span", null, toDisplayString(__props.window.templateName), 1)]), createElementVNode("div", _hoisted_25, [_hoisted_26, createElementVNode("span", null, toDisplayString(__props.window.areaPath), 1)])]), _hoisted_27, createElementVNode("div", _hoisted_28, [createElementVNode("div", _hoisted_29, [_hoisted_30, createElementVNode("span", null, [createElementVNode("strong", null, toDisplayString((_props$window$attend = __props.window.attendanceCount) !== null && _props$window$attend !== void 0 ? _props$window$attend : "—"), 1), __props.window.capacity != null ? (openBlock(), createElementBlock(Fragment, {
                   key: 0
-                }, [createTextVNode(" / " + toDisplayString(__props.window.capacity) + " capacity", 1)], 64)) : createCommentVNode("v-if", true)])]), __props.window.capacity != null && __props.window.attendanceCount != null ? (openBlock(), createElementBlock("div", _hoisted_30, [createElementVNode("div", {
+                }, [createTextVNode(" / " + toDisplayString(__props.window.capacity) + " capacity", 1)], 64)) : createCommentVNode("v-if", true)])]), __props.window.capacity != null && __props.window.attendanceCount != null ? (openBlock(), createElementBlock("div", _hoisted_31, [createElementVNode("div", {
                   class: normalizeClass(["progress-bar", capacityBarClass.value]),
                   style: normalizeStyle({
                     width: capacityPct.value + '%'
                   })
-                }, null, 6)])) : createCommentVNode("v-if", true), createElementVNode("div", _hoisted_31, [_hoisted_32, createElementVNode("span", null, toDisplayString((_props$window$softRo = __props.window.softRoomThreshold) !== null && _props$window$softRo !== void 0 ? _props$window$softRo : "—"), 1)]), createElementVNode("div", _hoisted_33, [_hoisted_34, createElementVNode("span", null, toDisplayString((_props$window$firmRo = __props.window.firmRoomThreshold) !== null && _props$window$firmRo !== void 0 ? _props$window$firmRo : "—"), 1)])]), sameRoomWindows.value.length > 0 ? (openBlock(), createElementBlock(Fragment, {
+                }, null, 6)])) : createCommentVNode("v-if", true), createElementVNode("div", _hoisted_32, [_hoisted_33, createElementVNode("span", null, toDisplayString((_props$window$softRo = __props.window.softRoomThreshold) !== null && _props$window$softRo !== void 0 ? _props$window$softRo : "—"), 1)]), createElementVNode("div", _hoisted_34, [_hoisted_35, createElementVNode("span", null, toDisplayString((_props$window$firmRo = __props.window.firmRoomThreshold) !== null && _props$window$firmRo !== void 0 ? _props$window$firmRo : "—"), 1)])]), sameRoomWindows.value.length > 0 ? (openBlock(), createElementBlock(Fragment, {
                   key: 0
-                }, [_hoisted_35, createElementVNode("div", _hoisted_36, [(openBlock(true), createElementBlock(Fragment, null, renderList(sameRoomWindows.value, other => {
+                }, [_hoisted_36, createElementVNode("div", _hoisted_37, [(openBlock(true), createElementBlock(Fragment, null, renderList(sameRoomWindows.value, other => {
                   return openBlock(), createElementBlock("div", {
                     key: "".concat(other.groupIdKey, "|").concat(other.scheduleIdKey, "|").concat(other.checkInStart),
                     class: normalizeClass(["cci-detail-row cci-same-room-row", {
                       'cci-conflict-row': other.isDoubleBooked && __props.window.isDoubleBooked
                     }]),
                     onClick: $event => emit('select', other)
-                  }, [createElementVNode("span", null, [other.isDoubleBooked && __props.window.isDoubleBooked ? (openBlock(), createElementBlock("i", _hoisted_38)) : createCommentVNode("v-if", true), createTextVNode(" " + toDisplayString(other.groupName), 1)]), createElementVNode("span", _hoisted_39, toDisplayString(formatTime(other.start)) + " – " + toDisplayString(formatTime(other.end)), 1)], 10, _hoisted_37);
+                  }, [createElementVNode("span", null, [other.isDoubleBooked && __props.window.isDoubleBooked ? (openBlock(), createElementBlock("i", _hoisted_39)) : createCommentVNode("v-if", true), createTextVNode(" " + toDisplayString(other.groupName), 1)]), createElementVNode("span", _hoisted_40, toDisplayString(formatTime(other.start)) + " – " + toDisplayString(formatTime(other.end)), 1)], 10, _hoisted_38);
                 }), 128))])], 64)) : createCommentVNode("v-if", true)])) : createCommentVNode("v-if", true)])) : createCommentVNode("v-if", true)];
               }),
               _: 1
@@ -503,46 +502,36 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
         key: 2
       };
       const _hoisted_10 = {
+        key: 0,
         class: "cci-legend"
       };
       const _hoisted_11 = _withScopeId(() => createElementVNode("span", {
         class: "cci-legend-item"
       }, [createElementVNode("span", {
-        class: "cci-swatch cci-swatch-legacy"
-      }), createTextVNode(" Legacy check-in")], -1));
-      const _hoisted_12 = _withScopeId(() => createElementVNode("span", {
-        class: "cci-legend-item"
-      }, [createElementVNode("span", {
-        class: "cci-swatch cci-swatch-nextgen"
-      }), createTextVNode(" Next-Gen check-in")], -1));
-      const _hoisted_13 = {
-        key: 0,
-        class: "cci-legend-item"
-      };
-      const _hoisted_14 = _withScopeId(() => createElementVNode("span", {
         class: "cci-swatch cci-swatch-double"
-      }, null, -1));
-      const _hoisted_15 = {
+      }), createTextVNode(" Possible double-booking")], -1));
+      const _hoisted_12 = [_hoisted_11];
+      const _hoisted_13 = {
         class: "cci-hours-row"
       };
-      const _hoisted_16 = _withScopeId(() => createElementVNode("div", {
+      const _hoisted_14 = _withScopeId(() => createElementVNode("div", {
         class: "cci-row-label"
       }, null, -1));
-      const _hoisted_17 = {
+      const _hoisted_15 = {
         class: "cci-row-track"
       };
-      const _hoisted_18 = {
+      const _hoisted_16 = {
         class: "cci-area-header"
       };
-      const _hoisted_19 = {
+      const _hoisted_17 = {
         class: "cci-area-header-inner"
       };
-      const _hoisted_20 = {
+      const _hoisted_18 = {
         class: "text-muted cci-area-template"
       };
-      const _hoisted_21 = ["title"];
-      const _hoisted_22 = ["title", "onClick"];
-      const _hoisted_23 = {
+      const _hoisted_19 = ["title"];
+      const _hoisted_20 = ["title", "onClick"];
+      const _hoisted_21 = {
         key: 0,
         class: "cci-count-chip"
       };
@@ -862,12 +851,12 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
                 window: selectedWindow.value,
                 allWindows: allWindows.value,
                 onSelect: onSelectWindow
-              }, null, 8, ["modelValue", "window", "allWindows"]), hasWindows.value ? (openBlock(), createElementBlock("div", _hoisted_9, [createElementVNode("div", _hoisted_10, [_hoisted_11, _hoisted_12, isOverlapFlagShown.value ? (openBlock(), createElementBlock("span", _hoisted_13, [_hoisted_14, createTextVNode(" Possible double-booking")])) : createCommentVNode("v-if", true)]), createElementVNode("div", {
+              }, null, 8, ["modelValue", "window", "allWindows"]), hasWindows.value ? (openBlock(), createElementBlock("div", _hoisted_9, [isOverlapFlagShown.value ? (openBlock(), createElementBlock("div", _hoisted_10, [..._hoisted_12])) : createCommentVNode("v-if", true), createElementVNode("div", {
                 class: "cci-timeline",
                 style: normalizeStyle({
                   '--cci-hours': hourSpan.value
                 })
-              }, [createElementVNode("div", _hoisted_15, [_hoisted_16, createElementVNode("div", _hoisted_17, [(openBlock(true), createElementBlock(Fragment, null, renderList(hourTicks.value, hour => {
+              }, [createElementVNode("div", _hoisted_13, [_hoisted_14, createElementVNode("div", _hoisted_15, [(openBlock(true), createElementBlock(Fragment, null, renderList(hourTicks.value, hour => {
                 return openBlock(), createElementBlock("span", {
                   key: hour.label,
                   class: "cci-hour-tick",
@@ -878,14 +867,14 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
               }), 128))])]), (openBlock(true), createElementBlock(Fragment, null, renderList(areaGroups.value, area => {
                 return openBlock(), createElementBlock(Fragment, {
                   key: area.areaPath
-                }, [createElementVNode("div", _hoisted_18, [createElementVNode("span", _hoisted_19, [createTextVNode(toDisplayString(area.areaPath) + " ", 1), createElementVNode("span", _hoisted_20, toDisplayString(area.templateName), 1)])]), (openBlock(true), createElementBlock(Fragment, null, renderList(area.rows, row => {
+                }, [createElementVNode("div", _hoisted_16, [createElementVNode("span", _hoisted_17, [createTextVNode(toDisplayString(area.areaPath) + " ", 1), createElementVNode("span", _hoisted_18, toDisplayString(area.templateName), 1)])]), (openBlock(true), createElementBlock(Fragment, null, renderList(area.rows, row => {
                   return openBlock(), createElementBlock("div", {
                     key: row.key,
                     class: "cci-location-row"
                   }, [createElementVNode("div", {
                     class: "cci-row-label",
                     title: row.locationName
-                  }, toDisplayString(row.locationName), 9, _hoisted_21), createElementVNode("div", {
+                  }, toDisplayString(row.locationName), 9, _hoisted_19), createElementVNode("div", {
                     class: "cci-row-track",
                     style: normalizeStyle({
                       height: row.laneCount * 30 + 'px'
@@ -900,7 +889,6 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
                     return openBlock(), createElementBlock("div", {
                       key: block.key,
                       class: normalizeClass(["cci-window", {
-                        'cci-window-nextgen': block.window.isNextGen,
                         'cci-window-double': isOverlapFlagShown.value && block.window.isDoubleBooked
                       }]),
                       style: normalizeStyle({
@@ -910,7 +898,7 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
                       }),
                       title: blockTooltip(block.window),
                       onClick: $event => onSelectWindow(block.window)
-                    }, [createTextVNode(toDisplayString(block.window.groupName) + " ", 1), block.window.attendanceCount != null ? (openBlock(), createElementBlock("span", _hoisted_23, toDisplayString(block.window.attendanceCount), 1)) : createCommentVNode("v-if", true)], 14, _hoisted_22);
+                    }, [createTextVNode(toDisplayString(block.window.groupName) + " ", 1), block.window.attendanceCount != null ? (openBlock(), createElementBlock("span", _hoisted_21, toDisplayString(block.window.attendanceCount), 1)) : createCommentVNode("v-if", true)], 14, _hoisted_20);
                   }), 128))], 4)]);
                 }), 128))], 64);
               }), 128))], 4)])) : createCommentVNode("v-if", true), createVNode(unref(script$2), {
@@ -926,7 +914,7 @@ System.register(['vue', '@Obsidian/Controls/datePicker.obs', '@Obsidian/Controls
         }
       }));
 
-      var css_248z = ".cci-header-actions[data-v-bf105c5a]{align-items:center;display:flex;gap:4px}.cci-header-actions[data-v-bf105c5a] .form-group{margin-bottom:0}.cci-header-actions[data-v-bf105c5a] .input-group{width:160px}.cci-legend[data-v-bf105c5a]{align-items:center;display:flex;flex-wrap:wrap;gap:16px;margin:8px 0 12px}.cci-legend-item[data-v-bf105c5a]{align-items:center;display:inline-flex;font-size:12px;gap:6px}.cci-swatch[data-v-bf105c5a]{border-radius:3px;display:inline-block;height:14px;width:14px}.cci-swatch-legacy[data-v-bf105c5a]{background:#6b8fc9}.cci-swatch-nextgen[data-v-bf105c5a]{background:#5cb85c}.cci-swatch-double[data-v-bf105c5a]{background:#fff;border:2px solid #d9534f}.cci-timeline[data-v-bf105c5a]{--cci-label-px:180px;--cci-hour-px:48px;border:1px solid var(--color-interface-soft,#dfe0e1);border-radius:4px;overflow-x:auto;-webkit-overflow-scrolling:touch}.cci-hours-row[data-v-bf105c5a],.cci-location-row[data-v-bf105c5a]{border-bottom:1px solid var(--color-interface-soft,#eee);display:flex}.cci-area-header[data-v-bf105c5a],.cci-hours-row[data-v-bf105c5a],.cci-location-row[data-v-bf105c5a]{min-width:calc(var(--cci-label-px) + var(--cci-hours)*var(--cci-hour-px))}.cci-row-label[data-v-bf105c5a]{background:var(--color-interface-softest,#fff);border-right:1px solid var(--color-interface-soft,#eee);flex:0 0 var(--cci-label-px);font-size:12px;left:0;overflow:hidden;padding:4px 8px;position:sticky;text-overflow:ellipsis;white-space:nowrap;z-index:2}.cci-row-track[data-v-bf105c5a]{background-image:repeating-linear-gradient(to right,transparent,transparent calc(100%/var(--cci-hours) - 1px),rgba(0,0,0,.06) calc(100%/var(--cci-hours) - 1px),rgba(0,0,0,.06) calc(100%/var(--cci-hours)));flex:1 1 auto;min-height:30px;position:relative}.cci-hours-row .cci-row-track[data-v-bf105c5a]{background-image:none;height:24px}.cci-hour-tick[data-v-bf105c5a]{color:#888;font-size:11px;position:absolute;top:2px;transform:translateX(-50%)}.cci-area-header[data-v-bf105c5a]{background:var(--color-interface-softer,#f5f5f5);border-bottom:1px solid var(--color-interface-soft,#eee);font-size:13px;font-weight:600;padding:4px 0}.cci-area-header-inner[data-v-bf105c5a]{display:inline-block;left:0;max-width:100vw;padding:0 8px;position:sticky}.cci-area-template[data-v-bf105c5a]{font-size:11px;font-weight:400;margin-left:8px}.cci-window[data-v-bf105c5a]{background:#6b8fc9;border-radius:3px;color:#fff;font-size:11px;height:26px;line-height:20px;margin-top:2px;overflow:hidden;padding:2px 6px;position:absolute;text-overflow:ellipsis;white-space:nowrap}.cci-window-nextgen[data-v-bf105c5a]{background:#5cb85c}.cci-window-double[data-v-bf105c5a]{box-shadow:inset 0 0 0 2px #d9534f}.cci-window[data-v-bf105c5a]{cursor:pointer}.cci-count-chip[data-v-bf105c5a]{background:hsla(0,0%,100%,.3);border-radius:8px;display:inline-block;font-weight:700;margin-left:4px;padding:0 5px}@media (max-width:640px){.cci-timeline[data-v-bf105c5a]{--cci-label-px:90px;--cci-hour-px:40px}.cci-row-label[data-v-bf105c5a]{font-size:11px;padding:4px 6px}.cci-window[data-v-bf105c5a]{font-size:10px;padding:2px 4px}.cci-area-header[data-v-bf105c5a]{font-size:12px}.cci-legend[data-v-bf105c5a]{gap:10px}.cci-header-actions[data-v-bf105c5a]{flex-wrap:wrap;justify-content:flex-end}.cci-header-actions[data-v-bf105c5a] .input-group{width:130px}}.cci-now-line[data-v-bf105c5a]{background:#d9534f;bottom:0;opacity:.6;pointer-events:none;position:absolute;top:0;width:2px;z-index:1}";
+      var css_248z = ".cci-header-actions[data-v-bf105c5a]{align-items:center;display:flex;gap:4px}.cci-header-actions[data-v-bf105c5a] .form-group{margin-bottom:0}.cci-header-actions[data-v-bf105c5a] .input-group{width:160px}.cci-header-actions .btn-grid-action[data-v-bf105c5a]{background:transparent;border:0;color:var(--color-interface-strong,#495057)}.cci-header-actions .btn-grid-action[data-v-bf105c5a]:hover{color:var(--color-interface-stronger,#212529)}.cci-header-actions .btn-grid-action.active[data-v-bf105c5a]{color:var(--color-primary,#ee7725)}.cci-legend[data-v-bf105c5a]{align-items:center;display:flex;flex-wrap:wrap;gap:16px;margin:8px 0 12px}.cci-legend-item[data-v-bf105c5a]{align-items:center;display:inline-flex;font-size:12px;gap:6px}.cci-swatch[data-v-bf105c5a]{border-radius:3px;display:inline-block;height:14px;width:14px}.cci-swatch-double[data-v-bf105c5a]{background:transparent;border:2px solid #d9534f}.cci-timeline[data-v-bf105c5a]{--cci-label-px:180px;--cci-hour-px:48px;border:1px solid var(--color-interface-soft,#dfe0e1);border-radius:4px;overflow-x:auto;-webkit-overflow-scrolling:touch}.cci-hours-row[data-v-bf105c5a],.cci-location-row[data-v-bf105c5a]{border-bottom:1px solid var(--color-interface-soft,#eee);display:flex}.cci-area-header[data-v-bf105c5a],.cci-hours-row[data-v-bf105c5a],.cci-location-row[data-v-bf105c5a]{min-width:calc(var(--cci-label-px) + var(--cci-hours)*var(--cci-hour-px))}.cci-row-label[data-v-bf105c5a]{background:var(--color-interface-softest,#fff);border-right:1px solid var(--color-interface-soft,#eee);flex:0 0 var(--cci-label-px);font-size:12px;left:0;overflow:hidden;padding:4px 8px;position:sticky;text-overflow:ellipsis;white-space:nowrap;z-index:2}.cci-row-track[data-v-bf105c5a]{background-image:repeating-linear-gradient(to right,transparent,transparent calc(100%/var(--cci-hours) - 1px),hsla(0,0%,50%,.18) calc(100%/var(--cci-hours) - 1px),hsla(0,0%,50%,.18) calc(100%/var(--cci-hours)));flex:1 1 auto;min-height:30px;position:relative}.cci-hours-row .cci-row-track[data-v-bf105c5a]{background-image:none;height:24px}.cci-hour-tick[data-v-bf105c5a]{color:#888;font-size:11px;position:absolute;top:2px;transform:translateX(-50%)}.cci-area-header[data-v-bf105c5a]{background:var(--color-interface-softer,#f5f5f5);border-bottom:1px solid var(--color-interface-soft,#eee);font-size:13px;font-weight:600;padding:4px 0}.cci-area-header-inner[data-v-bf105c5a]{display:inline-block;left:0;max-width:100vw;padding:0 8px;position:sticky}.cci-area-template[data-v-bf105c5a]{font-size:11px;font-weight:400;margin-left:8px}.cci-window[data-v-bf105c5a]{background:#6b8fc9;border-radius:3px;color:#fff;font-size:11px;height:26px;line-height:20px;margin-top:2px;overflow:hidden;padding:2px 6px;position:absolute;text-overflow:ellipsis;white-space:nowrap}.cci-window-double[data-v-bf105c5a]{box-shadow:inset 0 0 0 2px #d9534f}.cci-window[data-v-bf105c5a]{cursor:pointer}.cci-count-chip[data-v-bf105c5a]{background:hsla(0,0%,100%,.3);border-radius:8px;display:inline-block;font-weight:700;margin-left:4px;padding:0 5px}@media (max-width:640px){.cci-timeline[data-v-bf105c5a]{--cci-label-px:90px;--cci-hour-px:40px}.cci-row-label[data-v-bf105c5a]{font-size:11px;padding:4px 6px}.cci-window[data-v-bf105c5a]{font-size:10px;padding:2px 4px}.cci-area-header[data-v-bf105c5a]{font-size:12px}.cci-legend[data-v-bf105c5a]{gap:10px}.cci-header-actions[data-v-bf105c5a]{flex-wrap:wrap;justify-content:flex-end}.cci-header-actions[data-v-bf105c5a] .input-group{width:130px}}.cci-now-line[data-v-bf105c5a]{background:#d9534f;bottom:0;opacity:.6;pointer-events:none;position:absolute;top:0;width:2px;z-index:1}";
       styleInject(css_248z);
 
       script.__scopeId = "data-v-bf105c5a";

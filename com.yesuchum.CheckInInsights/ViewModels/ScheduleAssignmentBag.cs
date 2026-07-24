@@ -44,9 +44,6 @@ namespace com.yesuchum.CheckInInsights.ViewModels
         /// <summary>A link to the schedule's admin page, when the block has one configured.</summary>
         public string ScheduleUrl { get; set; }
 
-        /// <summary>True when the template appears to be a Next-Gen check-in configuration.</summary>
-        public bool IsNextGen { get; set; }
-
         /// <summary>The maximum (or desired) capacity configured on this specific group + location + schedule pairing, when one is set.</summary>
         public int? Capacity { get; set; }
 

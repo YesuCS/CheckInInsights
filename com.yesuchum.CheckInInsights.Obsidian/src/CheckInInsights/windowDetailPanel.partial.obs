@@ -9,9 +9,8 @@
                     <div class="d-flex flex-column">
                         <div class="text-interface-stronger text-md text-semibold">{{ window.groupName }}</div>
                         <div class="text-interface-medium text-sm">{{ window.locationName }} &middot; {{ window.campusName ?? "Unknown campus" }}</div>
-                        <div class="text-interface-medium text-sm">
-                            <span class="label" :class="window.isNextGen ? 'label-success' : 'label-info'">{{ window.isNextGen ? "Next-Gen" : "Legacy" }}</span>
-                            <span v-if="window.isDoubleBooked" class="label label-danger ml-1">Possible double-booking</span>
+                        <div v-if="window.isDoubleBooked" class="text-interface-medium text-sm">
+                            <span class="label label-danger">Possible double-booking</span>
                         </div>
                     </div>
                     <div class="d-flex gap-xs">

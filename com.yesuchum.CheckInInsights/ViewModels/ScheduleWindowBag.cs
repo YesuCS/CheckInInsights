@@ -58,9 +58,6 @@ namespace com.yesuchum.CheckInInsights.ViewModels
         /// <summary>When check-in closes, in ISO 8601 format.</summary>
         public string CheckInEnd { get; set; }
 
-        /// <summary>True when the template appears to be a Next-Gen check-in configuration.</summary>
-        public bool IsNextGen { get; set; }
-
         /// <summary>True when this window overlaps another window at the same location.</summary>
         public bool IsDoubleBooked { get; set; }
 

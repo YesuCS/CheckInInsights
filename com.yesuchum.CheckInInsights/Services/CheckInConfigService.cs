@@ -103,17 +103,6 @@ namespace com.yesuchum.CheckInInsights.Services
         }
 
         /// <summary>
-        /// Determines whether a template looks like a Next-Gen check-in
-        /// configuration. HFBC runs legacy and Next-Gen side by side with
-        /// "NextGen" in the template/area names, so the name is the reliable
-        /// discriminator today.
-        /// </summary>
-        private static bool IsNextGenTemplate( GroupTypeCache template )
-        {
-            return template.Name?.IndexOf( "NextGen", StringComparison.OrdinalIgnoreCase ) >= 0;
-        }
-
-        /// <summary>
         /// Loads the active groups (with locations, schedules and schedule
         /// configs) for the given areas. Campus scoping happens in memory after
         /// the campus is derived per pairing (group row first, then the
@@ -280,7 +269,6 @@ namespace com.yesuchum.CheckInInsights.Services
                                     End = times.End.ToString( "s" ),
                                     CheckInStart = times.CheckInStart.ToString( "s" ),
                                     CheckInEnd = times.CheckInEnd.ToString( "s" ),
-                                    IsNextGen = IsNextGenTemplate( area.Template ),
                                     Capacity = scheduleConfig?.MaximumCapacity ?? scheduleConfig?.DesiredCapacity,
                                     FirmRoomThreshold = groupLocation.Location?.FirmRoomThreshold,
                                     SoftRoomThreshold = groupLocation.Location?.SoftRoomThreshold
@@ -498,7 +486,6 @@ namespace com.yesuchum.CheckInInsights.Services
                 LocationName = groupLocation?.Location?.Name,
                 ScheduleIdKey = schedule?.IdKey,
                 ScheduleLabel = schedule != null ? GetScheduleLabel( schedule ) : null,
-                IsNextGen = IsNextGenTemplate( area.Template ),
                 Capacity = scheduleConfig?.MaximumCapacity ?? scheduleConfig?.DesiredCapacity,
                 RoomCapacity = groupLocation?.Location?.FirmRoomThreshold ?? groupLocation?.Location?.SoftRoomThreshold
             };

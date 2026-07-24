@@ -74,7 +74,7 @@ Optionally, review each block's settings (gear icon > Block Properties). All thr
 
 ## Check-in Timeline
 
-Rooms down the side, grouped by area. Hours across the top. One colored block per schedule window: blue for legacy check-in, green for Next-Gen.
+Rooms down the side, grouped by area. Hours across the top. One block per schedule window.
 
 ### Header controls
 
@@ -204,7 +204,6 @@ Your filter selections (and the Timeline's double-booking toggle) are saved as p
 
 ## Limitations
 
-- **Next-Gen detection is name-based.** A configuration is treated as Next-Gen when its name contains "NextGen". Rock does not currently expose a public API flag for this. If your naming convention differs, the legacy / Next-Gen coloring on the Timeline will be wrong (everything else is unaffected).
 - **Read-only, by design.** Nothing here edits configuration. Fix links take you to the core admin pages; the fixing happens there.
 - **The digest's memory is name-based.** Renaming an area, group, or room makes its existing findings look "new" to the next digest run. Expect a one-time re-alert after big renames.
 - **Rock 20.0 is the primary tested baseline.** The plugin compiles cleanly against Rock 1.16 and uses no internal Rock UI controls, but run your own verification pass on any version below what we operate.

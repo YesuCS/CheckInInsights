@@ -33,7 +33,6 @@ export interface ScheduleWindowBag {
     checkInStart?: string | null;
     checkInEnd?: string | null;
 
-    isNextGen: boolean;
     isDoubleBooked: boolean;
     capacity?: number | null;
     firmRoomThreshold?: number | null;
@@ -60,7 +59,6 @@ export interface ScheduleAssignmentBag {
     scheduleIdKey?: string | null;
     scheduleLabel?: string | null;
     scheduleUrl?: string | null;
-    isNextGen: boolean;
     capacity?: number | null;
     roomCapacity?: number | null;
 }
