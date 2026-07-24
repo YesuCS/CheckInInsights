@@ -110,28 +110,35 @@
 </template>
 
 <style scoped>
+/* Faithful recreation of core's .docked-panel look (the Connections Hub
+   request panel), self-contained so it renders identically on Rock versions
+   whose framework lacks the internal dockedPanel control. Fallback values
+   cover themes without the v2 style variables. */
 .cci-docked-panel {
     position: fixed;
-    top: 0;
+    top: var(--top-header-height, 0px);
     right: 0;
     bottom: 0;
-    z-index: 1040;
+    z-index: 1050;
     width: min(420px, 100vw);
     display: flex;
     flex-direction: column;
     background: var(--color-interface-softest, #fff);
-    border-left: 1px solid var(--color-interface-soft, #dfe0e1);
-    box-shadow: -4px 0 16px rgba(0, 0, 0, 0.12);
+    border: 1px solid var(--color-interface-soft, #dfe0e1);
+    border-radius: var(--rounded-large, 12px) 0 0 var(--rounded-large, 12px);
+    box-shadow: var(--popup-box-shadow, 0 10px 40px rgba(0, 0, 0, 0.2));
+    overflow: hidden;
 }
 
 .cci-docked-body {
     overflow-y: auto;
     flex: 1 1 auto;
+    min-height: 0;
 }
 
 .cci-panel-slide-enter-active,
 .cci-panel-slide-leave-active {
-    transition: transform 0.2s ease;
+    transition: transform 250ms ease;
 }
 
 .cci-panel-slide-enter-from,
