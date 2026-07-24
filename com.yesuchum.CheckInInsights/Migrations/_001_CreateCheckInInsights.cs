@@ -42,6 +42,12 @@ namespace com.yesuchum.CheckInInsights.Migrations
         /// <inheritdoc/>
         public override void Up()
         {
+            // Block types MUST be registered before block instances are placed.
+            // Rock runs plugin migrations at startup BEFORE its automatic
+            // block-type registration reflects over plugin DLLs, so on a fresh
+            // install the BlockType rows don't exist yet when AddBlock runs.
+            RegisterBlockTypes();
+
             // -- Pages --
 
             RockMigrationHelper.AddPage(
@@ -153,6 +159,39 @@ namespace com.yesuchum.CheckInInsights.Migrations
                 END" );
         }
 
+        /// <summary>
+        /// Registers the three entity block types so they exist before this
+        /// migration places instances of them. Startup auto-registration would
+        /// create the same rows later (matched by guid), so there is no
+        /// duplication.
+        /// </summary>
+        private void RegisterBlockTypes()
+        {
+            RockMigrationHelper.AddOrUpdateEntityBlockType(
+                name: "Check-in Timeline",
+                description: "Shows what check-in schedules/groups/locations are active concurrently for a date, with live check-in counts and possible double-booking flags.",
+                entityName: "com.yesuchum.CheckInInsights.Blocks.ScheduleConcurrencyMap",
+                category: "Yesu Chum > Check-in Insights",
+                guid: BlockType.SCHEDULE_CONCURRENCY_MAP
+            );
+
+            RockMigrationHelper.AddOrUpdateEntityBlockType(
+                name: "Rooms & Schedules",
+                description: "Lists every check-in group / room / schedule pairing as a filterable grid, including incomplete pairings (missing rooms or schedules).",
+                entityName: "com.yesuchum.CheckInInsights.Blocks.ScheduleCrossReference",
+                category: "Yesu Chum > Check-in Insights",
+                guid: BlockType.SCHEDULE_CROSS_REFERENCE
+            );
+
+            RockMigrationHelper.AddOrUpdateEntityBlockType(
+                name: "Check-in Status Overview",
+                description: "Scans check-in configuration and lists setup problems: groups without schedules or rooms, missing printers, missing thresholds and capacities, and empty areas.",
+                entityName: "com.yesuchum.CheckInInsights.Blocks.CheckInConfigLint",
+                category: "Yesu Chum > Check-in Insights",
+                guid: BlockType.CHECKIN_CONFIG_LINT
+            );
+        }
+
         /// <inheritdoc/>
         public override void Down()
         {
@@ -166,6 +205,10 @@ namespace com.yesuchum.CheckInInsights.Migrations
             RockMigrationHelper.DeletePage( RoomsAndSchedulesPage );
             RockMigrationHelper.DeletePage( TimelinePage );
             RockMigrationHelper.DeletePage( InsightsPage );
+
+            RockMigrationHelper.DeleteBlockType( BlockType.CHECKIN_CONFIG_LINT );
+            RockMigrationHelper.DeleteBlockType( BlockType.SCHEDULE_CROSS_REFERENCE );
+            RockMigrationHelper.DeleteBlockType( BlockType.SCHEDULE_CONCURRENCY_MAP );
         }
     }
 }

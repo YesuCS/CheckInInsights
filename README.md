@@ -15,6 +15,7 @@ Plus the **Status Digest** job, which re-runs the status scan on a schedule and 
 - [User Guide](docs/UserGuide.md). Install, each tool in depth, the digest job, filters and preferences, troubleshooting, limitations.
 - [Technical Specification](docs/TechnicalSpec.md). Architecture, the shared config-walking service, campus resolution, the double-booking rule, block/GUID reference, build and deploy, gotchas.
 - [Uninstall Guide](docs/Uninstall.md). Clean removal, post-uninstall housekeeping, verification checklist.
+- [Changelog](CHANGELOG.md). What changed in each shipped version.
 
 ## Repo layout
 
