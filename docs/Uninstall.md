@@ -1,6 +1,6 @@
 # CheckInInsights Uninstall Guide
 
-How to cleanly remove CheckInInsights from a Rock install. **Rock does not currently expose an uninstall action in the Rock Shop UI for installed plugins**, so the path is the manual one below regardless of how you installed. The good news: this plugin creates **no database tables** and never writes to your check-in data, so uninstalling is simpler than most plugins. It's a matter of removing pages, block instances, one job, one stored setting, and the files.
+How to cleanly remove CheckInInsights from a Rock install. The good news: this plugin creates **no database tables** and never writes to your check-in data, so uninstalling is simpler than most plugins. It's a matter of removing pages, block instances, one job, one stored setting, and the files.
 
 For day-to-day usage see `UserGuide.md`. For architecture see `TechnicalSpec.md`.
 
@@ -8,11 +8,20 @@ For day-to-day usage see `UserGuide.md`. For architecture see `TechnicalSpec.md`
 
 ## Contents
 
-1. [Before you uninstall](#before-you-uninstall)
-2. [Uninstall steps](#uninstall-steps)
-3. [Post-uninstall housekeeping](#post-uninstall-housekeeping)
-4. [Verification checklist](#verification-checklist)
-5. [Reinstalling later](#reinstalling-later)
+1. [Uninstalling or downgrading through Rock](#uninstalling-or-downgrading-through-rock)
+2. [Before you uninstall](#before-you-uninstall)
+3. [Uninstall steps](#uninstall-steps)
+4. [Post-uninstall housekeeping](#post-uninstall-housekeeping)
+5. [Verification checklist](#verification-checklist)
+6. [Reinstalling later](#reinstalling-later)
+
+---
+
+## Uninstalling or downgrading through Rock
+
+Rock doesn't support uninstalling or downgrading plugins yet. The Rock Shop can install a plugin and update it to a newer version, but at the time this was written (November 2026) there's no way to remove a plugin or roll it back to an older version from inside Rock.
+
+CheckInInsights is ready for when Spark adds that. The package ships an `uninstall` folder that lists every file it installs, and its migration has a `Down()` that undoes the pages, job, and block types it set up, so Rock will have what it needs once it can do this on its own. Until then, uninstalling is the manual process below, and downgrading means uninstalling and then installing the older version by hand.
 
 ---
 
@@ -41,7 +50,7 @@ If the Status Digest job has been alerting people, tell them it's going away. No
 
 ## Uninstall steps
 
-1. **Delete the pages.** In **Admin Tools > Pages** (or from the page itself via Page Properties), delete the **Check-in Insights** page under Installed Plugins. Deleting the parent removes the three child pages and the block instances they host.
+1. **Delete the pages.** In **Admin Tools > Pages**, open **Check-in Insights** under Installed Plugins and delete its three child pages first, then the **Check-in Insights** page itself. The block instances on those pages go with them.
 2. **Delete the job.** **Admin Tools > Jobs**, find **Check-in Insights: Status Digest**, delete it.
 3. **Delete the block types.** **Admin Tools > CMS Configuration > Block Types**, filter by the **Yesu Chum > Check-in Insights** category, delete the three entries (Check-in Timeline, Rooms & Schedules, Check-in Status Overview). If you skip this, Rock re-registers nothing once the DLL is gone, but the dead rows linger.
 4. **Remove the files.**
@@ -91,4 +100,4 @@ The plugin's row in `PluginMigration` (`com.yesuchum.CheckInInsights` migrations
 
 ## Reinstalling later
 
-Copy the DLL and the Obsidian bundles back and restart. One caveat: if you left the `PluginMigration` history row in place, the migration will NOT re-run (Rock considers it already applied), so the pages and job won't be recreated. Either delete the plugin's rows from `PluginMigration` before the restart, or recreate the pages and job by hand. Block types re-register automatically either way.
+Install it again from the Rock Shop or by hand on the server (see Installation in the User Guide). One caveat: if you left the `PluginMigration` history row in place, the migration will NOT re-run (Rock considers it already applied), so the pages and job won't be recreated. Either delete the plugin's rows from `PluginMigration` before the restart, or recreate the pages and job by hand. Block types re-register automatically either way.
