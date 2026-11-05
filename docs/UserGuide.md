@@ -35,19 +35,28 @@ Everything works identically whether an area runs on legacy check-in or Next-Gen
 
 ## Installation
 
-### From the Rock Shop (recommended)
+There are two ways to install CheckInInsights: from the Rock Shop, or by hand on the server Rock runs on. Rock doesn't have a page for uploading a `.plugin` file, so a manual install happens on the server, not in the browser.
 
-1. In Rock, go to **Admin Tools → Rock Shop**.
-2. Search for `CheckInInsights` and open the package.
-3. Click **Install** and restart the Rock app pool when prompted.
+### From the Rock Shop
 
-### Manual install (developer / .plugin file)
+1. Go to **Admin Tools > Rock Shop** and search for `CheckInInsights`.
+2. Open the package and click **Install**.
+3. Rock restarts after the install, and the plugin migration runs on that restart.
 
-If you have a `.plugin` file on hand: **Admin Tools → Rock Shop → Installed Packages → Install Package File**, upload it, restart when prompted. Or, from a source build:
+### Manual install on the server
 
-1. Copy `com.yesuchum.CheckInInsights.dll` into `RockWeb/Bin/`.
-2. Copy the three `*.obs.js` bundles (plus `.map` files) into `RockWeb/Plugins/com_yesuchum/CheckInInsights/`.
-3. Restart the Rock application (full restart, not just a recycle-on-touch; plugin migrations only run at startup).
+Use this when the Rock Shop isn't an option, like a staging box or an instance without internet access. You need the `.plugin` file and access to the machine hosting Rock (the VM or server running IIS).
+
+1. A `.plugin` file is a zip. Copy it to the server, change the extension to `.zip`, and extract it.
+2. In IIS Manager, stop the Rock application pool.
+3. Copy everything inside the package's `content` folder into the Rock web root, the folder the Rock site points to in IIS (the one with `web.config` and `Bin` in it), and merge it with the folders already there. When you're done, these should exist:
+   ```
+   Bin\com.yesuchum.CheckInInsights.dll
+   Plugins\com_yesuchum\CheckInInsights\   (three .obs.js files and their .map files)
+   ```
+4. Start the application pool. The plugin migration runs on startup.
+
+Only the `content` folder gets copied. Anything else in the package is for the Rock Shop, and none of it needs to run by hand. A manual install doesn't show up in the Rock Shop's list of installed plugins, so updates go the same way: stop the app pool, copy the new version's `content` files over the old ones, and start it again.
 
 ### What the installer does
 
